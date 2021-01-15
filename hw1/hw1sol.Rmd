@@ -111,3 +111,19 @@ cal
 cal 2021
 ```
 
+`cal 9 1752` displays a calendar for the 9th month of the year (September) for the year 1972. However, the calendar is missing 11 days (3rd to the 13th). I looked it up, and it's apparently because in September 1972, 11 days were skipped to make up for lack of leap year adjustments.
+
+```{bash}
+cal 9 1752
+```
+
+`date` displays the day of the week, the date, and the time (Coordinated Universal Time).
+```{bash}
+date
+```
+
+`hostname` 
+```{bash}
+hostname
+```
+
