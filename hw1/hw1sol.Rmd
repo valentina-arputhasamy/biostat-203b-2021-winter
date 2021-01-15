@@ -1,6 +1,6 @@
 ---
 title: "Biostat 203B Homework 1"
-author: Hua Zhou
+author: Valentina Arputhasamy
 subtitle: Due Jan 22 @ 11:59PM
 output: html_document
 ---
