@@ -90,7 +90,28 @@ The bash command `zgrep` is used to search for expressions from a file even if i
         ls -l $datafile
       done
     ```
+
+The `ls -l` command lists detailed contents of a directory. In the above bash script, the contents of any file ending in `.gz` within the folder `core` are outputted. The output shows the permissions for each file, the owner of the file, the size of the file, the date and time the file was last modified and file/folder name.
+
 Display the number of lines in each data file using a similar loop.
+
+```{bash}
+  for datafile in /usr/203b-data/mimic-iv/*/*.gz
+    do 
+      awk 'END { print NR }' $datafile
+      done
+```
+
+The above code displays the number of lines in each data file in /usr/203b-data/mimic.iv that end with .gz. 
+
+```{bash}
+  for datafile in /usr/203b-data/mimic-iv/*/*.gz
+    do
+      wc -l $datafile
+      done
+```
+
+The above code also displays the number of lines in each data file in /usr/203b-data/mimic.iv that end with .gz, but unlike the previous example, it also includes the name of each file.
 
 4. Display the first few lines of `admissions.csv.gz`. How many rows are in this data file? How many unique patients (identified by `subject_id`) are in this data file? What are the possible values taken by each of the variable `admission_type`, `admission_location`, `insurance`, `language`, `marital_status`, and `ethnicity`? Also report the count for each unique value of these variables. (Hint: combine Linux commands `zcat`, `head`/`tail`, `awk`, `uniq`, `wc`, and so on.)
 
