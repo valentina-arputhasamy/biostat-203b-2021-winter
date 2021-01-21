@@ -115,6 +115,25 @@ The above code also displays the number of lines in each data file in /usr/203b-
 
 4. Display the first few lines of `admissions.csv.gz`. How many rows are in this data file? How many unique patients (identified by `subject_id`) are in this data file? What are the possible values taken by each of the variable `admission_type`, `admission_location`, `insurance`, `language`, `marital_status`, and `ethnicity`? Also report the count for each unique value of these variables. (Hint: combine Linux commands `zcat`, `head`/`tail`, `awk`, `uniq`, `wc`, and so on.)
 
+To display the first few lines of `admissions.csv.gz` run the following code:
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | head -10
+```
+
+#make sure this is correct
+
+The following code tells us how many rows are in the data file:
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk 'END {print NR}'
+```
+
+According to the output, there are 524521 rows in the data file `admissions.csv.gz`.
+
+
+
+
 ## Q3. Who's popular in Price and Prejudice
 
 1. You and your friend just have finished reading *Pride and Prejudice* by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <http://www.gutenberg.org/cache/epub/42671/pg42671.txt> and save to your local folder. 
