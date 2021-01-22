@@ -96,24 +96,13 @@ The `ls -l` command lists detailed contents of a directory. In the above bash sc
 Display the number of lines in each data file using a similar loop.
 
 ```{bash}
-  for datafile in /usr/203b-data/mimic-iv/*/*.gz
+  for datafile in /usr/203b-data/mimic-iv/core/*.gz
     do 
-      awk 'END { print NR }' $datafile
+      zcat $datafile | wc -l 
       done
 ```
 
-The above code displays the number of lines in each data file in /usr/203b-data/mimic.iv that end with .gz. 
-
-```{bash}
-  for datafile in /usr/203b-data/mimic-iv/*/*.gz
-    do
-      wc -l $datafile
-      done
-```
-
-The above code also displays the number of lines in each data file in /usr/203b-data/mimic.iv that end with .gz, but unlike the previous example, it also includes the name of each file.
-
-4. Display the first few lines of `admissions.csv.gz`. How many rows are in this data file? How many unique patients (identified by `subject_id`) are in this data file? What are the possible values taken by each of the variable `admission_type`, `admission_location`, `insurance`, `language`, `marital_status`, and `ethnicity`? Also report the count for each unique value of these variables. (Hint: combine Linux commands `zcat`, `head`/`tail`, `awk`, `uniq`, `wc`, and so on.)
+5. Display the first few lines of `admissions.csv.gz`. How many rows are in this data file? How many unique patients (identified by `subject_id`) are in this data file? What are the possible values taken by each of the variable `admission_type`, `admission_location`, `insurance`, `language`, `marital_status`, and `ethnicity`? Also report the count for each unique value of these variables. (Hint: combine Linux commands `zcat`, `head`/`tail`, `awk`, `uniq`, `wc`, and so on.)
 
 To display the first few lines of `admissions.csv.gz` run the following code:
 
@@ -121,7 +110,6 @@ To display the first few lines of `admissions.csv.gz` run the following code:
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | head -10
 ```
 
-#make sure this is correct
 
 The following code tells us how many rows are in the data file:
 
@@ -131,7 +119,12 @@ zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk 'END {print NR}'
 
 According to the output, there are 524521 rows in the data file `admissions.csv.gz`.
 
+How many unique patients (identified by `subject_id`) are in this data file?
 
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | sort $1 | uniq | awk 'END {print NR -1}'
+```
+According to the output, there are 524520 unique patients in the data file `admissions.csv.gz`.
 
 
 ## Q3. Who's popular in Price and Prejudice
