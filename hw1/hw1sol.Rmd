@@ -304,20 +304,53 @@ uname -a
 uptime
 ```
 
-`who am i` shows who is logged on. 
+`who am i` shows the current login-tty user. 
 
 ```{bash}
-who am i
+whoami
 ```
 
-`who` shows 
+`who` will show all users who have a login-tty. 
 
 ```{bash}
 who
 ```
 
+`w` will show who is logged on and what he/she is doing.
+
 ```{bash}
-man who
+w
 ```
+
+`id` prints the real and effective user and group IDs.
+
+```{bash}
+id
+```
+
+`last | head`: The `last` function shows a listing of the last logged in users; piping that into `head` shows us the first 10 users on that list.
+
+```{bash}
+last | head
+```
+`echo {con,pre}{sent,fer}{s,ed}`: Prints out all possible ways to combine 'con' and 'pre' with 'sent' or 'fer' in the middle, and 's' and 'ed' at the end.
+
+```{bash}
+echo {con,pre}{sent,fer}{s,ed}
+```
+
+`time sleep 5`: The `time` function times the execution of a script. The `sleep` function suspends the calling process of time for a specified time (in this example it is delayed for five seconds).
+
+```{bash}
+time sleep 5
+```
+
+`history | tail`: The `history` function lists the commands that have been run in the session. Piping it into `tail` prints the last ten commands from that list.
+
+```{bash}
+history | tail
+```
+
+
 
 
