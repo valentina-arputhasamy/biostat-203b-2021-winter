@@ -235,11 +235,19 @@ However, in the second command, 'hello, world' is appended to any existing conte
     # Usage: bash middle.sh filename end_line num_lines
     head -n "$2" "$1" | tail -n "$3"
     ```
-Using `chmod` make the file executable by the owner, and run 
+Use `chmod` make the file executable by the owner, and run 
     ```{bash eval=FALSE}
     ./middle.sh pride_and_prejudice.txt 20 5
     ```
+
+The above is equivalent to:
+```{bash}
+head -n 20 pride_and_prejudice.txt | tail -n 5
+```
+
 Explain the output. Explain the meaning of `"$1"`, `"$2"`, and `"$3"` in this shell script. Why do we need the first line of the shell script?
+
+The output prints the last 5 lines of the first 20 lines of *Pride and Prejudice*. `"1"` indicates the name of the file, `"$2"` indicates the number of lines to print with the head function and the `"$3"` indicates the number of lines to print with the tail function.
 
 ### Q4. More fun with Linux
 
