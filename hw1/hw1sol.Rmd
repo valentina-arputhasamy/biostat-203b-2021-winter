@@ -207,7 +207,6 @@ zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $12
 
 Do **not** put this text file `pride_and_prejudice.txt` in Git. Using a `for` loop, how would you tabulate the number of times each of the four characters is mentioned?
 
-
 ```{bash}
 for string in 'Elizabeth' 'Jane' 'Lydia' 'Darcy'
   do grep -o $string pride_and_prejudice.txt | wc -l
@@ -271,7 +270,7 @@ cal 9 1752
 date
 ```
 
-`hostname` 
+`hostname` is used to view or change a system’s domain and hostname.
 ```{bash}
 hostname
 ```
