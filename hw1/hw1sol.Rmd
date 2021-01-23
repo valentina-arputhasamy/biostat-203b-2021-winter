@@ -110,7 +110,6 @@ To display the first few lines of `admissions.csv.gz` run the following code:
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | head -10
 ```
 
-
 The following code tells us how many rows are in the data file:
 
 ```{bash}
@@ -124,8 +123,80 @@ How many unique patients (identified by `subject_id`) are in this data file?
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | sort $1 | uniq | awk 'END {print NR -1}'
 ```
-According to the output, there are 524520 unique patients in the data file `admissions.csv.gz`.
 
+According to the output, there are 524520 unique patients in the data file `admissions.csv.gz` (removed the header from the count).
+
+## Admission_type
+
+### Unique Values
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $6}' | sort | uniq | head
+```
+### Count
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $6}' | sort | uniq -c | head
+```
+## Admission Location
+
+### Unique Values
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $7}' | sort | uniq | head
+```
+### Count
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $7}' | sort | uniq -c | head
+```
+## Insurance
+
+### Unique Values
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $9}' | sort | uniq | head
+```
+
+### Count
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $9}' | sort | uniq -c | head
+```
+
+## Language
+
+### Unique Values
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $10}' | sort | uniq | head
+```
+
+### Count
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $10}' | sort | uniq -c | head
+```
+
+## Marital Status
+
+### Unique Values
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $11}' | sort | uniq -c | head
+```
+
+## Ethnicity
+
+### Unique Values
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $12}' | sort | uniq | head
+```
+### Count
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $12}' | sort | uniq -c | head
+```
 
 ## Q3. Who's popular in Price and Prejudice
 
