@@ -274,12 +274,50 @@ cal 9 1752
 ```
 
 `date` displays the day of the week, the date, and the time (Coordinated Universal Time).
+
 ```{bash}
 date
 ```
 
 `hostname` is used to view or change a system’s domain and hostname.
+
 ```{bash}
 hostname
 ```
+
+`arch` is used to print the machine hardware name.
+
+```{bash}
+arch
+```
+
+`uname` prints the computer's system information. The `-a` is to print all information in the following order: 
+the kernel name, the network node hostname, the kernel release, the machine hardware name, the processor type, the hardware platform, and the operating system. 
+
+```{bash}
+uname -a
+```
+
+`uptime` tells us how long the system has been running. It displays the current time (in UTC), how long the system has been running, how many users are currently logged on, and the system overlaod averages for the past 1, 5, and 15 minutes. 
+
+```{bash}
+uptime
+```
+
+`who am i` shows who is logged on. 
+
+```{bash}
+who am i
+```
+
+`who` shows 
+
+```{bash}
+who
+```
+
+```{bash}
+man who
+```
+
 
