@@ -210,11 +210,11 @@ Do **not** put this text file `pride_and_prejudice.txt` in Git. Using a `for` lo
 
 ```{bash}
 for string in 'Elizabeth' 'Jane' 'Lydia' 'Darcy'
-  do grep $string pride_and_prejudice.txt | wc -l
+  do grep -o $string pride_and_prejudice.txt | wc -l
 done
 ```
 
-The name `Elizabeth` occurrs 633 times, the name `Jane` occurs 290 times, the name `Lydia` occurs 166 times, and the name `Darcy` occurs 414 times. Therefore, the name `Elizabeth` is the name that was most mentioned in the book *Pride and Prejudice*, followed by the name `Darcy`. 
+The name `Elizabeth` occurs 634 times, the name `Jane` occurs 294 times, the name `Lydia` occurs 170 times, and the name `Darcy` occurs 417 times. Therefore, the name `Elizabeth` is the name that was most mentioned in the book *Pride and Prejudice*, followed by the name `Darcy`. 
 
 2. What's the difference between the following two commands?
     ```{bash eval=FALSE}
@@ -224,6 +224,10 @@ The name `Elizabeth` occurrs 633 times, the name `Jane` occurs 290 times, the na
     ```{bash eval=FALSE}
     echo 'hello, world' >> test2.txt
     ```
+
+Upon execution, the first command, 'hello, world' will display in the file test1.txt. If there was any other content in the file test1.txt, it will be replaced with 'hello, world.' 
+
+However, in the second command, 'hello, world' is appended to any existing content in the file test2.txt. If the file test2.txt doesn't exist yet, the command will create a file called test2.txt with 'hello, world' inside.
 
 3. Using your favorite text editor (e.g., `vi`), type the following and save the file as `middle.sh`:
     ```{bash eval=FALSE}
