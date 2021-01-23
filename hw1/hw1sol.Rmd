@@ -94,9 +94,13 @@ ls /usr/203b-data/mimic-iv/icu
       done
     ```
 
-The `ls -l` command lists detailed contents of a directory. In the above bash script, the contents of any file ending in `.gz` within the folder `core` are outputted. The output shows the permissions for each file, the owner of the file, the size of the file, the date and time the file was last modified and file/folder name.
+- The `ls -l` command lists detailed contents of a directory. In the above bash script, the contents of any file ending in `.gz` within the folder `core` are outputted. The output shows the permissions for each file, the owner of the file, the size of the file, the date and time the file was last modified and file/folder name.
 
 Display the number of lines in each data file using a similar loop.
+
+- The `admissions` file contains 524,521 lines.
+- The `patients` file contains 383,221 lines.
+- The `transfers` file contains 2,192,964 lines.
 
 ```{bash}
   for datafile in /usr/203b-data/mimic-iv/core/*.gz
@@ -107,13 +111,13 @@ Display the number of lines in each data file using a similar loop.
 
 5. Display the first few lines of `admissions.csv.gz`. How many rows are in this data file? How many unique patients (identified by `subject_id`) are in this data file? What are the possible values taken by each of the variable `admission_type`, `admission_location`, `insurance`, `language`, `marital_status`, and `ethnicity`? Also report the count for each unique value of these variables. (Hint: combine Linux commands `zcat`, `head`/`tail`, `awk`, `uniq`, `wc`, and so on.)
 
-To display the first few lines of `admissions.csv.gz` run the following code:
+**To display the first few lines of `admissions.csv.gz` run the following code:**
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | head -10
 ```
 
-The following code tells us how many rows are in the data file:
+**The following code tells us how many rows are in the data file:**
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk 'END {print NR}'
@@ -121,81 +125,92 @@ zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk 'END {print NR}'
 
 According to the output, there are 524521 rows in the data file `admissions.csv.gz`.
 
-How many unique patients (identified by `subject_id`) are in this data file?
+**To find out how many unique patients (identified by `subject_id`) are in this data file run the following code:**
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | sort $1 | uniq | awk 'END {print NR -1}'
 ```
 
-According to the output, there are 524520 unique patients in the data file `admissions.csv.gz` (removed the header from the count).
+- According to the output, there are 524,520 unique patients in the data file `admissions.csv.gz` (removed the header from the count).
 
-## Admission_type
+#### Admission_type
 
-### Unique Values
+##### Unique Values
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $6}' | sort | uniq | head
 ```
-### Count
+
+##### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $6}' | sort | uniq -c | head
 ```
-## Admission Location
 
-### Unique Values
+#### Admission Location
+
+##### Unique Values
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $7}' | sort | uniq | head
 ```
-### Count
+
+##### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $7}' | sort | uniq -c | head
 ```
-## Insurance
 
-### Unique Values
+#### Insurance
+
+##### Unique Values
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $9}' | sort | uniq | head
 ```
 
-### Count
+##### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $9}' | sort | uniq -c | head
 ```
 
-## Language
+#### Language
 
-### Unique Values
+##### Unique Values
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $10}' | sort | uniq | head
 ```
 
-### Count
+##### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $10}' | sort | uniq -c | head
 ```
 
-## Marital Status
+#### Marital Status
 
-### Unique Values
+##### Unique Values
+
+```{bash}
+zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $11}' | sort | uniq | head
+```
+
+###### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $11}' | sort | uniq -c | head
 ```
 
-## Ethnicity
+#### Ethnicity
 
-### Unique Values
+##### Unique Values
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $12}' | sort | uniq | head
 ```
-### Count
+
+##### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $12}' | sort | uniq -c | head
@@ -204,11 +219,12 @@ zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $12
 ## Q3. Who's popular in Price and Prejudice
 
 1. You and your friend just have finished reading *Pride and Prejudice* by Jane Austen. Among the four main characters in the book, Elizabeth, Jane, Lydia, and Darcy, your friend thinks that Darcy was the most mentioned. You, however, are certain it was Elizabeth. Obtain the full text of the novel from <http://www.gutenberg.org/cache/epub/42671/pg42671.txt> and save to your local folder. 
+
     ```{bash, eval=FALSE}
     curl http://www.gutenberg.org/cache/epub/42671/pg42671.txt > pride_and_prejudice.txt
     ```
 
-Do **not** put this text file `pride_and_prejudice.txt` in Git. Using a `for` loop, how would you tabulate the number of times each of the four characters is mentioned?
+Using a `for` loop, how would you tabulate the number of times each of the four characters is mentioned?
 
 ```{bash}
 for string in 'Elizabeth' 'Jane' 'Lydia' 'Darcy'
@@ -216,7 +232,7 @@ for string in 'Elizabeth' 'Jane' 'Lydia' 'Darcy'
 done
 ```
 
-The name `Elizabeth` occurs 634 times, the name `Jane` occurs 294 times, the name `Lydia` occurs 170 times, and the name `Darcy` occurs 417 times. Therefore, the name `Elizabeth` is the name that was most mentioned in the book *Pride and Prejudice*, followed by the name `Darcy`. 
+- The name `Elizabeth` occurs 634 times, the name `Jane` occurs 294 times, the name `Lydia` occurs 170 times, and the name `Darcy` occurs 417 times. Therefore, the name `Elizabeth` is the name that was most mentioned in the book *Pride and Prejudice*, followed by the name `Darcy`. 
 
 2. What's the difference between the following two commands?
     ```{bash eval=FALSE}
@@ -227,9 +243,9 @@ The name `Elizabeth` occurs 634 times, the name `Jane` occurs 294 times, the nam
     echo 'hello, world' >> test2.txt
     ```
 
-Upon execution, the first command, 'hello, world' will display in the file test1.txt. If there was any other content in the file test1.txt, it will be replaced with 'hello, world.' 
+- Upon execution, the first command, 'hello, world' will display in the file test1.txt. If there was any other content in the file test1.txt, it will be replaced with 'hello, world.' 
 
-However, in the second command, 'hello, world' is appended to any existing content in the file test2.txt. If the file test2.txt doesn't exist yet, the command will create a file called test2.txt with 'hello, world' inside.
+- However, in the second command, 'hello, world' is appended to any existing content in the file test2.txt. If the file test2.txt doesn't exist yet, the command will create a file called test2.txt with 'hello, world' inside.
 
 3. Using your favorite text editor (e.g., `vi`), type the following and save the file as `middle.sh`:
     ```{bash eval=FALSE}
@@ -243,14 +259,15 @@ Use `chmod` make the file executable by the owner, and run
     ./middle.sh pride_and_prejudice.txt 20 5
     ```
 
-The above is equivalent to:
+- The above is equivalent to:
+
 ```{bash}
 head -n 20 pride_and_prejudice.txt | tail -n 5
 ```
 
 Explain the output. Explain the meaning of `"$1"`, `"$2"`, and `"$3"` in this shell script. Why do we need the first line of the shell script?
 
-The output prints the last 5 lines of the first 20 lines of *Pride and Prejudice*. `"1"` indicates the name of the file, `"$2"` indicates the number of lines to print with the head function and the `"$3"` indicates the number of lines to print with the tail function.
+- The output prints the last 5 lines of the first 20 lines of *Pride and Prejudice*. `"1"` indicates the name of the file, `"$2"` indicates the number of lines to print with the head function and the `"$3"` indicates the number of lines to print with the tail function.
 
 ### Q4. More fun with Linux
 
@@ -258,102 +275,98 @@ Try these commands in Bash and interpret the results: `cal`, `cal 2021`, `cal 9 
 
 **Solution** : 
 
-`cal` displays a calendar of the current month.
+- `cal`: Displays a calendar of the current month.
 
 ```{bash}
 cal
 ```
 
-`cal 2021` displays a calendar for each month of the year 2021. 
+- `cal 2021`: Displays a calendar for each month of the year 2021. 
 
 ```{bash}
 cal 2021
 ```
 
-`cal 9 1752` displays a calendar for the 9th month of the year (September) for the year 1972. However, the calendar is missing 11 days (3rd to the 13th). I looked it up, and it's apparently because in September 1972, 11 days were skipped to make up for lack of leap year adjustments.
+- `cal 9 1752`: Displays a calendar for the 9th month of the year (September) for the year 1972. However, the calendar is missing 11 days (3rd to the 13th). I looked it up, and it's apparently because in September 1972, 11 days were skipped to make up for lack of leap year adjustments.
 
 ```{bash}
 cal 9 1752
 ```
 
-`date` displays the day of the week, the date, and the time (Coordinated Universal Time).
+- `date`: Displays the day of the week, the date, and the time (Coordinated Universal Time).
 
 ```{bash}
 date
 ```
 
-`hostname` is used to view or change a system’s domain and hostname.
+- `hostname`: Is used to view or change a system’s domain and hostname.
 
 ```{bash}
 hostname
 ```
 
-`arch` is used to print the machine hardware name.
+- `arch`: Is used to print the machine hardware name.
 
 ```{bash}
 arch
 ```
 
-`uname` prints the computer's system information. The `-a` is to print all information in the following order: 
+- `uname`: Prints the computer's system information. The `-a` is to print all information in the following order: 
 the kernel name, the network node hostname, the kernel release, the machine hardware name, the processor type, the hardware platform, and the operating system. 
 
 ```{bash}
 uname -a
 ```
 
-`uptime` tells us how long the system has been running. It displays the current time (in UTC), how long the system has been running, how many users are currently logged on, and the system overlaod averages for the past 1, 5, and 15 minutes. 
+- `uptime`: Tells us how long the system has been running. It displays the current time (in UTC), how long the system has been running, how many users are currently logged on, and the system overlaod averages for the past 1, 5, and 15 minutes. 
 
 ```{bash}
 uptime
 ```
 
-`who am i` shows the current login-tty user. 
+- `who am i`: Shows the current login-tty user. 
 
 ```{bash}
 whoami
 ```
 
-`who` will show all users who have a login-tty. 
+- `who`: Shows all users who have a login-tty. 
 
 ```{bash}
 who
 ```
 
-`w` will show who is logged on and what he/she is doing.
+- `w`: Shows who is logged on and what he/she is doing.
 
 ```{bash}
 w
 ```
 
-`id` prints the real and effective user and group IDs.
+- `id`: Prints the real and effective user and group IDs.
 
 ```{bash}
 id
 ```
 
-`last | head`: The `last` function shows a listing of the last logged in users; piping that into `head` shows us the first 10 users on that list.
+- `last | head`: The `last` function shows a listing of the last logged in users; piping that into `head` shows us the first 10 users on that list.
 
 ```{bash}
 last | head
 ```
-`echo {con,pre}{sent,fer}{s,ed}`: Prints out all possible ways to combine 'con' and 'pre' with 'sent' or 'fer' in the middle, and 's' and 'ed' at the end.
+- `echo {con,pre}{sent,fer}{s,ed}`: Prints out all possible ways to combine 'con' and 'pre' with 'sent' or 'fer' in the middle, and 's' and 'ed' at the end.
 
 ```{bash}
 echo {con,pre}{sent,fer}{s,ed}
 ```
 
-`time sleep 5`: The `time` function times the execution of a script. The `sleep` function suspends the calling process of time for a specified time (in this example it is delayed for five seconds).
+- `time sleep 5`: The `time` function times the execution of a script. The `sleep` function suspends the calling process of time for a specified time (in this example it is delayed for five seconds).
 
 ```{bash}
 time sleep 5
 ```
 
-`history | tail`: The `history` function lists the commands that have been run in the session. Piping it into `tail` prints the last ten commands from that list.
+- `history | tail`: The `history` function lists the commands that have been run in the session. Piping it into `tail` prints the last ten commands from that list.
 
 ```{bash}
 history | tail
 ```
-
-
-
-
