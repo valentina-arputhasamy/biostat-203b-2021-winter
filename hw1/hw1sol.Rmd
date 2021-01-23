@@ -3,8 +3,8 @@ title: "Biostat 203B Homework 1"
 author: "Valentina Arputhasamy"
 subtitle: Due Jan 22 @ 11:59PM
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -204,7 +204,17 @@ zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $12
     ```{bash, eval=FALSE}
     curl http://www.gutenberg.org/cache/epub/42671/pg42671.txt > pride_and_prejudice.txt
     ```
+
 Do **not** put this text file `pride_and_prejudice.txt` in Git. Using a `for` loop, how would you tabulate the number of times each of the four characters is mentioned?
+
+
+```{bash}
+for string in 'Elizabeth' 'Jane' 'Lydia' 'Darcy'
+  do grep $string pride_and_prejudice.txt | wc -l
+done
+```
+
+The name `Elizabeth` occurrs 633 times, the name `Jane` occurs 290 times, the name `Lydia` occurs 166 times, and the name `Darcy` occurs 414 times. Therefore, the name `Elizabeth` is the name that was most mentioned in the book *Pride and Prejudice*, followed by the name `Darcy`. 
 
 2. What's the difference between the following two commands?
     ```{bash eval=FALSE}
