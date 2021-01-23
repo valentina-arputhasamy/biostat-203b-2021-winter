@@ -20,31 +20,31 @@ sessionInfo()
 
 **No handwritten homework reports are accepted for this course.** We work with Git and GitHub. Efficient and abundant use of Git, e.g., frequent and well-documented commits, is an important criterion for grading your homework.
 
-1. Apply for the [Student Developer Pack](https://education.github.com/pack) at GitHub using your UCLA email.
+Part 1: Apply for the [Student Developer Pack](https://education.github.com/pack) at GitHub using your UCLA email.
 
 **Solution: Done**
 
-2. Create a **private** repository `biostat-203b-2021-winter` and add `Hua-Zhou`, `Chris-German` and `ElvisCuiHan` as your collaborators with write permission.
+Part 2: Create a **private** repository `biostat-203b-2021-winter` and add `Hua-Zhou`, `Chris-German` and `ElvisCuiHan` as your collaborators with write permission.
 
 **Solution: Done**
 
-3. Top directories of the repository should be `hw1`, `hw2`, ... Maintain two branches `master` and `develop`. The `develop` branch will be your main playground, the place where you develop solution (code) to homework problems and write up report. The `master` branch will be your presentation area. Submit your homework files (R markdown file `Rmd`, `html` file converted from R markdown, all code and data sets to reproduce results) in `master` branch.
+Part 3: Top directories of the repository should be `hw1`, `hw2`, ... Maintain two branches `master` and `develop`. The `develop` branch will be your main playground, the place where you develop solution (code) to homework problems and write up report. The `master` branch will be your presentation area. Submit your homework files (R markdown file `Rmd`, `html` file converted from R markdown, all code and data sets to reproduce results) in `master` branch.
 
 **Solution: Done**
 
-4. After each homework due date, teaching assistant and instructor will check out your master branch for grading. Tag each of your homework submissions with tag names `hw1`, `hw2`, ... Tagging time will be used as your submission time. That means if you tag your `hw1` submission after deadline, penalty points will be deducted for late submission.
+Part 4: After each homework due date, teaching assistant and instructor will check out your master branch for grading. Tag each of your homework submissions with tag names `hw1`, `hw2`, ... Tagging time will be used as your submission time. That means if you tag your `hw1` submission after deadline, penalty points will be deducted for late submission.
 
 **Solution: Done**
 
-5. After this course, you can make this repository public and use it to demonstrate your skill sets on job market.
+Part 5: After this course, you can make this repository public and use it to demonstrate your skill sets on job market.
 
 ## Q2. Linux Shell Commands
 
-1. This exercise (and later in this course) uses the [MIMIC-IV data](https://mimic-iv.mit.edu), a freely accessible critical care database developed by the MIT Lab for Computational Physiology. Follow the instructions at <https://mimic-iv.mit.edu/docs/access/> to (1) complete the CITI `Data or Specimens Only Research` course and (2) obtain the PhysioNet credential for using the MIMIC-IV data. Display the verification links to your completion report and completion certificate here. (Hint: The CITI training takes a couple hours and the PhysioNet credentialing takes a couple days; do not leave it to the last minute.)
+Part 1: This exercise (and later in this course) uses the [MIMIC-IV data](https://mimic-iv.mit.edu), a freely accessible critical care database developed by the MIT Lab for Computational Physiology. Follow the instructions at <https://mimic-iv.mit.edu/docs/access/> to (1) complete the CITI `Data or Specimens Only Research` course and (2) obtain the PhysioNet credential for using the MIMIC-IV data. Display the verification links to your completion report and completion certificate here. (Hint: The CITI training takes a couple hours and the PhysioNet credentialing takes a couple days; do not leave it to the last minute.)
 
 **Solution: Done**
 
-2. The `/usr/203b-data/mimic-iv/` folder on teaching server contains data sets from MIMIC-IV. Refer to <https://mimic-iv.mit.edu/docs/datasets/> for details of data files.  
+Part 2: The `/usr/203b-data/mimic-iv/` folder on teaching server contains data sets from MIMIC-IV. Refer to <https://mimic-iv.mit.edu/docs/datasets/> for details of data files.  
 
     ```{bash}
     ls -l /usr/203b-data/mimic-iv
@@ -80,6 +80,8 @@ ls /usr/203b-data/mimic-iv/icu
 
 (b) What are the functionalities of the bash commands `zcat`, `zless`, `zmore`, and `zgrep`? 
 
+**Solution:**
+
 - The bash command `zcat` is used to view the contents of a compressed/zipped file without actually decompressing it.
 
 - The bash command `zless` is used to paginate a compressed file.
@@ -100,9 +102,13 @@ Part 4:
       done
     ```
 
+**Solution**:
+
 - The `ls -l` command lists detailed contents of a directory. In the above bash script, the contents of any file ending in `.gz` within the folder `core` are outputted. The output shows the permissions for each file, the owner of the file, the size of the file, the date and time the file was last modified and file/folder name.
 
 (b) Display the number of lines in each data file using a similar loop.
+
+**Solution**:
 
 - The `admissions` file contains 524,521 lines.
 - The `patients` file contains 383,221 lines.
@@ -143,69 +149,69 @@ zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | sort $1 | uniq | awk 'END 
 
 (b) What are the possible values taken by each of the variable `admission_type`, `admission_location`, `insurance`, `language`, `marital_status`, and `ethnicity`? Also report the count for each unique value of these variables. (Hint: combine Linux commands `zcat`, `head`/`tail`, `awk`, `uniq`, `wc`, and so on.)
 
-#### Admission_type
+##### Admission_type
 
 
-##### Unique Values
+###### Unique Values
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $6}' | sort | uniq | head
 ```
 
-##### Count
+###### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $6}' | sort | uniq -c | head
 ```
 
-#### Admission Location
+##### Admission Location
 
 
-##### Unique Values
+###### Unique Values
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $7}' | sort | uniq | head
 ```
 
-##### Count
+###### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $7}' | sort | uniq -c | head
 ```
 
-#### Insurance
+##### Insurance
 
 
-##### Unique Values
+###### Unique Values
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $9}' | sort | uniq | head
 ```
 
-##### Count
+###### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $9}' | sort | uniq -c | head
 ```
 
-#### Language
+##### Language
 
 
-##### Unique Values
+###### Unique Values
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $10}' | sort | uniq | head
 ```
 
-##### Count
+###### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $10}' | sort | uniq -c | head
 ```
 
-#### Marital Status
+##### Marital Status
 
 
-##### Unique Values
+###### Unique Values
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $11}' | sort | uniq | head
@@ -217,16 +223,16 @@ zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $11
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $11}' | sort | uniq -c | head
 ```
 
-#### Ethnicity
+##### Ethnicity
 
 
-##### Unique Values
+###### Unique Values
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $12}' | sort | uniq | head
 ```
 
-##### Count
+###### Count
 
 ```{bash}
 zcat /usr/203b-data/mimic-iv/core/admissions.csv.gz | awk -F, 'FNR >1 {print $12}' | sort | uniq -c | head
