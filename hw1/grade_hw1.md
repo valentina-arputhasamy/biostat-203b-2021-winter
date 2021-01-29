@@ -1,6 +1,6 @@
 *Valentina Arputhasamy*
 
-### Overall Grade: 75/100
+### Overall Grade: 90/100
 
 ### Quality of report: 10/10
 
@@ -12,13 +12,13 @@
 
 -   Is the report clear (whole sentences, typos, grammar)? Do readers have a clear idea what's going on and how are results produced by just reading the report? 
 
-### Completeness, correctness and efficiency of solution: 36/50
+### Completeness, correctness and efficiency of solution: 51/50
 
 - Q1 (10/10)
 
-- Q2 (4/20)
+- Q2 (19/20)
 
-If CITI training is not linked -15 points 
+If CITI training is not linked -15 points **emailed to me** +15
 
 Incorrect number of unique patients. -1pt
 
