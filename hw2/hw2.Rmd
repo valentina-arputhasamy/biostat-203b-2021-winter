@@ -96,40 +96,17 @@ icustays$stayduration <- log(as.double(difftime(icustays$outtime, icustays$intim
 ```
 
 ```{r}
-icustays %>% ggplot(aes(stayduration)) + geom_histogram(fill = "thistle4") + theme_bw() + ggtitle("ICU Stay Duration") + xlab("Length of ICU Stay \n (Log-Transformed)") + ylab("Count")
-
+icustays %>% ggplot(aes(stayduration)) + geom_histogram(fill = "thistle4") + theme_minimal() + ggtitle("ICU Stay Duration") + xlab("Length of ICU Stay \n (Log-Transformed)") + ylab("count")
 ```
-
-
-
-
-```{r}
-ggplot() + 
-  geom_boxplot(aes(y = icustays$stayduration)) + 
-  scale_x_discrete( ) +
-  labs(title = "ICU Unit Stay Duration in Days",
-       y = "Number of Days")
-```
-
-```{r}
-
-```
-
-
-
-```{r}
-ggplot() + 
-  geom_bar(aes(y = icustays$stayduration)) + scale_x_discrete( ) +
-  labs(title = "ICU Unit Stay Duration in Days",
-       y = "Number of Days")
-```
-
-
 
 - first ICU unit  
 
 ```{r}
-icustays %>% ggplot( aes(first_careunit)) + geom_bar() 
+icustays2 <- icustays2 %>% mutate(first_careunit_recode = recode(first_careunit, "Coronary Care Unit (CCU)" = "CCU", "Trauma SICU (TSICU)" = "TSICU", "Surgical Intensive Care Unit (SICU)" = "MICU/SICU", "Medical/Surgical Intensive Care Unit (MICU/SICU)" = "MICU/SICU", "Medical Intensive Care Unit (MICU)" = "MICU/SICU", "Cardiac Vascular Intensive Care Unit (CVICU)" = "CIVICU", "Neuro Surgical Intensive Care Unit (Neuro SICU)" = "Neuro SICU"))
+```
+
+```{r}
+icustays2 %>% ggplot( aes(first_careunit_recode))+ geom_bar(fill = "thistle4") + scale_x_discrete(guide = guide_axis(n.dodge=3)) + theme_minimal() + ggtitle("Number of Patients by First ICU Type") + xlab("ICU Type") + ylab("count")
 ```
 
 
