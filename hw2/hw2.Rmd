@@ -44,6 +44,10 @@ system(str_c("tree -s -L 2 ", shQuote(mimic_path)), intern = TRUE)
 
 At this moment, you should already get credentialed on the PhysioNet. Please include a screenshot of your `Data Use Agreement for the MIMIC-IV (v0.4)`.
 
+*Solution:*
+
+![PhysioNet Credential](biostat-203b-2021-winter/hw2/PhysioNet Credential.png)
+
 ## Q2. `read.csv` (base R) vs `read_csv` (tidyverse) vs `fread` (data.table)
 
 There are quite a few utilities in R for reading data files. Let us test the speed of reading a moderate sized compressed csv file, `admissions.csv.gz`, by three programs: `read.csv` in base R, `read_csv` in tidyverse, and `fread` in the popular data.table package. Is there any speed difference?
@@ -102,10 +106,9 @@ icustays %>% ggplot(aes(stayduration)) + geom_histogram(fill = "thistle4") + the
 - first ICU unit  
 
 ```{r}
+icustays2 <- icustays 
 icustays2 <- icustays2 %>% mutate(first_careunit_recode = recode(first_careunit, "Coronary Care Unit (CCU)" = "CCU", "Trauma SICU (TSICU)" = "TSICU", "Surgical Intensive Care Unit (SICU)" = "MICU/SICU", "Medical/Surgical Intensive Care Unit (MICU/SICU)" = "MICU/SICU", "Medical Intensive Care Unit (MICU)" = "MICU/SICU", "Cardiac Vascular Intensive Care Unit (CVICU)" = "CIVICU", "Neuro Surgical Intensive Care Unit (Neuro SICU)" = "Neuro SICU"))
-```
 
-```{r}
 icustays2 %>% ggplot( aes(first_careunit_recode))+ geom_bar(fill = "thistle4") + scale_x_discrete(guide = guide_axis(n.dodge=3)) + theme_minimal() + ggtitle("Number of Patients by First ICU Type") + xlab("ICU Type") + ylab("count")
 ```
 
