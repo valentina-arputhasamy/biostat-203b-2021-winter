@@ -1,11 +1,14 @@
 ---
 title: "Biostat 203B Homework 2"
+author: "Valentina Arputhasamy"
 subtitle: Due Feb 5 @ 11:59PM
-author: Valentina Arputhasamy
-output: 
+output:
   html_document:
-    toc: true
-    toc_depth: 4 
+    toc: yes
+    toc_depth: 4
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
 ---
 
 Display machine information for reproducibility:
@@ -18,6 +21,8 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 library(tidyverse)
 library(data.table)
 library(lubridate)
+library(dplyr)
+library(ggthemes)
 ```
 
 ```{r}
@@ -47,7 +52,7 @@ In this homework, we stick to the tidyverse.
 
 *Solution:*
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 getwd()
 setwd("/usr/203b-data/mimic-iv/core")
 
@@ -87,9 +92,23 @@ icustays$intime <- ymd_hms(icustays$intime)
 
 icustays$outtime <- ymd_hms(icustays$outtime)
 
-icustays$stayduration <- as.double(difftime(icustays$outtime, icustays$intime, units = "days"))
+icustays$stayduration <- log(as.double(difftime(icustays$outtime, icustays$intime, units = "days")))
+```
 
-summary(icustays$stayduration)
+```{r}
+icustays %>% ggplot(aes(stayduration)) + geom_histogram(fill = "thistle4") + theme_bw() + ggtitle("ICU Stay Duration") + xlab("Length of ICU Stay \n (Log-Transformed)") + ylab("Count")
+
+```
+
+
+
+
+```{r}
+ggplot() + 
+  geom_boxplot(aes(y = icustays$stayduration)) + 
+  scale_x_discrete( ) +
+  labs(title = "ICU Unit Stay Duration in Days",
+       y = "Number of Days")
 ```
 
 ```{r}
@@ -97,7 +116,23 @@ summary(icustays$stayduration)
 ```
 
 
+
+```{r}
+ggplot() + 
+  geom_bar(aes(y = icustays$stayduration)) + scale_x_discrete( ) +
+  labs(title = "ICU Unit Stay Duration in Days",
+       y = "Number of Days")
+```
+
+
+
 - first ICU unit  
+
+```{r}
+icustays %>% ggplot( aes(first_careunit)) + geom_bar() 
+```
+
+
 - last ICU unit  
 
 ## Q4. `admission` data
