@@ -100,7 +100,7 @@ icustays$stayduration <- log(as.double(difftime(icustays$outtime, icustays$intim
 ```
 
 ```{r}
-icustays %>% ggplot(aes(stayduration)) + geom_histogram(fill = "thistle4") + theme_minimal() + ggtitle("ICU Stay Duration") + xlab("Length of ICU Stay \n (Log-Transformed)") + ylab("count")
+icustays %>% ggplot(aes(stayduration)) + geom_histogram(fill = "lightsteelblue2", color = "lightsteelblue4") + theme_minimal() + ggtitle("ICU Stay Duration") + xlab("Length of ICU Stay \n (Log-Transformed)") + ylab("count")
 ```
 
 - first ICU unit  
@@ -109,11 +109,24 @@ icustays %>% ggplot(aes(stayduration)) + geom_histogram(fill = "thistle4") + the
 icustays2 <- icustays 
 icustays2 <- icustays2 %>% mutate(first_careunit_recode = recode(first_careunit, "Coronary Care Unit (CCU)" = "CCU", "Trauma SICU (TSICU)" = "TSICU", "Surgical Intensive Care Unit (SICU)" = "MICU/SICU", "Medical/Surgical Intensive Care Unit (MICU/SICU)" = "MICU/SICU", "Medical Intensive Care Unit (MICU)" = "MICU/SICU", "Cardiac Vascular Intensive Care Unit (CVICU)" = "CIVICU", "Neuro Surgical Intensive Care Unit (Neuro SICU)" = "Neuro SICU"))
 
-icustays2 %>% ggplot( aes(first_careunit_recode))+ geom_bar(fill = "thistle4") + scale_x_discrete(guide = guide_axis(n.dodge=3)) + theme_minimal() + ggtitle("Number of Patients by First ICU Type") + xlab("ICU Type") + ylab("count")
+icustays2 %>% ggplot( aes(first_careunit_recode))+ geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + theme_minimal() + ggtitle("Number of Patients by First ICU Type") + xlab("ICU Type") + ylab("count") + coord_flip()
+
+#sum(ifelse(icustays2$last_careunit == "PACU", 1, 0))
+#sum(ifelse(icustays2$first_careunit_recode == "PACU", 1 ,0))
+
 ```
 
 
 - last ICU unit  
+
+```{r}
+unique(icustays2$first_careunit)
+unique(icustays2$last_careunit)
+
+icustays2 <- icustays2 %>% mutate(last_careunit_recode = recode(last_careunit, "Coronary Care Unit (CCU)" = "CCU", "Trauma SICU (TSICU)" = "TSICU", "Surgical Intensive Care Unit (SICU)" = "MICU/SICU", "Medical/Surgical Intensive Care Unit (MICU/SICU)" = "MICU/SICU", "Medical Intensive Care Unit (MICU)" = "MICU/SICU", "Cardiac Vascular Intensive Care Unit (CVICU)" = "CVICU", "Neuro Surgical Intensive Care Unit (Neuro SICU)" = "Neuro SICU"))
+
+icustays2 %>% ggplot(aes(last_careunit_recode)) + geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + theme_minimal() + ggtitle("Number of Patients by Last ICU Type") + xlab("ICU Type") + ylab("count") + coord_flip()
+```
 
 ## Q4. `admission` data
 
@@ -134,6 +147,21 @@ Information of the patients admitted into hospital is available in `ADMISSION.cs
 - martial status  
 - ethnicity  
 - death 
+
+```{r}
+setwd("/usr/203b-data/mimic-iv/core")
+admissions <- read_csv("admissions.csv.gz")
+```
+
+### Admission Year
+
+```{r}
+admissions$admit_year <- year(admissions$admittime)
+
+admissions %>% ggplot(aes(admit_year)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Patients by Admit Year") + xlab("year") + theme_minimal()
+```
+
+### Admission Month
 
 Note it is possible that one patient (uniquely identified by the `SUBJECT_ID`) is admitted into hospital multiple times. When summarizing some demographic information, it makes sense to summarize based on unique patients. 
 
