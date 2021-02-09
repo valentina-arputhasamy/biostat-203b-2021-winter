@@ -132,8 +132,8 @@ icustays2 %>% ggplot(aes(last_careunit_recode)) + geom_bar(fill = "lightsteelblu
 
 Information of the patients admitted into hospital is available in `ADMISSION.csv.gz`. See <https://mimic-iv.mit.edu/docs/datasets/core/admissions/> for details of each field in this file. Summarize following variables using appropriate graphs. Explain any patterns you observe.   
 
-- admission year  
-- admission month  
+- admission year (done) 
+- admission month (done) 
 - admission month day  
 - admission week day  
 - admission hour (anything unusual?)  
@@ -162,6 +162,31 @@ admissions %>% ggplot(aes(admit_year)) + geom_bar(binwidth = 1, fill = "lightste
 ```
 
 ### Admission Month
+
+```{r}
+admissions$admit_month <- month(admissions$admittime) 
+
+admissions2 <- admissions %>% mutate(admit_month_recode = recode(admit_month, "1" = "Jan", "2" = "Feb", "3" = "Mar", "4" = "Apr", "5" = "May", "6" = "Jun", "7" = "Jul", "8" = "Aug", "9" = "Sep", "10" = "Oct", "11" = "Nov", "12" = "Dec")) 
+
+admissions2$admit_month_recode = factor(admissions2$admit_month_recode, levels = month.abb)
+```
+
+
+```{r}
+admissions2 %>% ggplot(aes(admit_month_recode)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Patients by Admit Month") + xlab("month") + ylab("count") + scale_x_discrete() + theme_minimal() + ylim(c(0,45000))
+```
+### Admission Day of the Month (looks kinda weird, maybe should edit ticks)
+
+
+```{r}
+admissions2$admit_date <- day(admissions2$admittime)
+
+admissions2 %>% ggplot(aes(admit_date)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Patients by Day of the Month") + xlab("Day of the Month")
+```
+
+
+### 
+
 
 Note it is possible that one patient (uniquely identified by the `SUBJECT_ID`) is admitted into hospital multiple times. When summarizing some demographic information, it makes sense to summarize based on unique patients. 
 
