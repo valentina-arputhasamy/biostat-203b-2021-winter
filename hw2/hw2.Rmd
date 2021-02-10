@@ -134,9 +134,9 @@ Information of the patients admitted into hospital is available in `ADMISSION.cs
 
 - admission year (done) 
 - admission month (done) 
-- admission month day  
-- admission week day  
-- admission hour (anything unusual?)  
+- admission month day (done) 
+- admission week day (done)
+- admission hour (anything unusual?)  : not sure what he thinks is unusual
 - number of deaths in each year  
 - admission type  
 - number of admissions per patient  
@@ -158,7 +158,7 @@ admissions <- read_csv("admissions.csv.gz")
 ```{r}
 admissions$admit_year <- year(admissions$admittime)
 
-admissions %>% ggplot(aes(admit_year)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Patients by Admit Year") + xlab("year") + theme_minimal()
+admissions %>% ggplot(aes(admit_year)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Year") + xlab("year") + theme_minimal()
 ```
 
 ### Admission Month
@@ -173,7 +173,7 @@ admissions2$admit_month_recode = factor(admissions2$admit_month_recode, levels =
 
 
 ```{r}
-admissions2 %>% ggplot(aes(admit_month_recode)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Patients by Admit Month") + xlab("month") + ylab("count") + scale_x_discrete() + theme_minimal() + ylim(c(0,45000))
+admissions2 %>% ggplot(aes(admit_month_recode)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Month") + xlab("month") + ylab("count") + scale_x_discrete() + theme_minimal() + ylim(c(0,45000))
 ```
 ### Admission Day of the Month (looks kinda weird, maybe should edit ticks)
 
@@ -181,11 +181,45 @@ admissions2 %>% ggplot(aes(admit_month_recode)) + geom_bar(binwidth = 1, fill = 
 ```{r}
 admissions2$admit_date <- day(admissions2$admittime)
 
-admissions2 %>% ggplot(aes(admit_date)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Patients by Day of the Month") + xlab("Day of the Month")
+admissions2 %>% ggplot(aes(admit_date)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Day of the Month") + xlab("Day of the Month")
 ```
 
 
-### 
+### Admissions Day of the Week
+
+```{r}
+admissions2$admit_dow <- wday(admissions2$admittime, label = T)
+
+admissions2 %>% ggplot(aes(admit_dow)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Day of the Week") + xlab("Day of the Week")
+```
+### Admission Hour (what is unusual?)
+
+```{r}
+admissions2$admit_hour <- hour(admissions2$admittime) 
+
+admissions2 %>% ggplot(aes(admit_hour)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Hour") + xlab("Hour") + theme_minimal()
+```
+
+### Number of Deaths in Each Year
+
+```{r}
+admissions2$death_year <- year(admissions2$deathtime)
+
+admissions2 %>% ggplot(aes(death_year)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Deaths per Year") + xlab("Year") + ylab("Number of Deaths") + theme_minimal()
+```
+
+
+### Admission Type
+
+```{r}
+admissions2 %>% ggplot(aes(admission_type)) + geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + coord_flip() + ggtitle("Number of Admits by Admission Type") + xlab("Admission Type") + theme_minimal() 
+```
+
+### Number of Admissions per Patient
+
+```{r}
+
+```
 
 
 Note it is possible that one patient (uniquely identified by the `SUBJECT_ID`) is admitted into hospital multiple times. When summarizing some demographic information, it makes sense to summarize based on unique patients. 
