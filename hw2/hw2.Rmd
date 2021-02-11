@@ -137,8 +137,8 @@ Information of the patients admitted into hospital is available in `ADMISSION.cs
 - admission month day (done) 
 - admission week day (done)
 - admission hour (anything unusual?)  : not sure what he thinks is unusual
-- number of deaths in each year  
-- admission type  
+- number of deaths in each year  (done)
+- admission type (done)
 - number of admissions per patient  
 - admission location  
 - discharge location  
@@ -231,11 +231,60 @@ Explore `patients.csv.gz` (<https://mimic-iv.mit.edu/docs/datasets/core/patients
 - `gender`  
 - `anchor_age` (explain pattern you see)
 
+```{r}
+getwd()
+setwd("/usr/203b-data/mimic-iv/core")
+patients <- read_csv("patients.csv.gz")
+```
+
+
+### Gender
+
+There are 200,226 female patients and 182,994 male patients.
+
+```{r}
+patients %>% count(.,gender)
+```
+
+
+```{r}
+patients %>% ggplot(aes(gender)) + geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + coord_flip() + ggtitle("Number of Patients by Gender") + xlab("Gender") + theme_minimal() 
+```
+
+### Anchor Age
+
+0 is possibly for missing data. The median and mean anchor age is approximately 41. 
+
+```{r}
+summary(patients$anchor_age)
+```
+
+```{r}
+patients %>% ggplot(aes(anchor_age)) + 
+  geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Patients by Gender") + xlab("Anchor Age") + theme_minimal() 
+```
+
+
 ## Q6. Lab results
 
 `labevents.csv.gz` (<https://mimic-iv.mit.edu/docs/datasets/hosp/labevents/>) contains all laboratory measurements for patients. 
 
 We are interested in the lab measurements of creatinine, potassium, sodium, chloride, bicarbonate, hematocrit, white blood cell count, glucose, magnesium, calcium, phosphorus, and lactate. Find the `itemid`s of these lab measurements from `d_labitems.csv.gz` and retrieve a subset of `labevents.csv.gz` only containing these items.
+
+```{r}
+setwd("/usr/203b-data/mimic-iv-derived-data")
+labevents <- fread("labevents_filtered_itemid.csv.gz")
+```
+
+```{r}
+#labevents$V3
+
+want.id <- c(50912, 50971, 50983, 50902, 50882, 51221, 51301, 50931, 50960, 50893, 50813)
+
+labevents.want <- labevents %>% 
+  filter(V3 %in% want.id)
+```
+
 
 ## Q7. Vitals from chartered events
 
