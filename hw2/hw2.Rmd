@@ -197,7 +197,7 @@ admissions2 %>% ggplot(aes(admit_dow)) + geom_bar(binwidth = 1, fill = "lightste
 ```{r}
 admissions2$admit_hour <- hour(admissions2$admittime) 
 
-admissions2 %>% ggplot(aes(admit_hour)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Hour") + xlab("Hour") + theme_minimal()
+admissions2 %>% ggplot(aes(admit_hour)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Hour") + xlab("Hour") + theme_minimal() + scale_x_continuous(n.breaks = 10)
 ```
 
 ### Number of Deaths in Each Year
@@ -261,7 +261,8 @@ summary(patients$anchor_age)
 
 ```{r}
 patients %>% ggplot(aes(anchor_age)) + 
-  geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Patients by Gender") + xlab("Anchor Age") + theme_minimal() 
+  geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") +
+  ggtitle("Number of Patients by Gender") + xlab("Anchor Age") +theme_minimal() 
 ```
 
 
@@ -269,20 +270,16 @@ patients %>% ggplot(aes(anchor_age)) +
 
 `labevents.csv.gz` (<https://mimic-iv.mit.edu/docs/datasets/hosp/labevents/>) contains all laboratory measurements for patients. 
 
-We are interested in the lab measurements of creatinine, potassium, sodium, chloride, bicarbonate, hematocrit, white blood cell count, glucose, magnesium, calcium, phosphorus, and lactate. Find the `itemid`s of these lab measurements from `d_labitems.csv.gz` and retrieve a subset of `labevents.csv.gz` only containing these items.
+We are interested in the lab measurements of creatinine (50912), potassium (50971), sodium (50983), chloride (50902), bicarbonate (50882), hematocrit (51221), white blood cell count (51301), glucose (50931), magnesium (50960), calcium (50893), and lactate (50813). Find the `itemids` of these lab measurements from `d_labitems.csv.gz` and retrieve a subset of `labevents.csv.gz` only containing these items.
 
 ```{r}
 setwd("/usr/203b-data/mimic-iv-derived-data")
-labevents <- fread("labevents_filtered_itemid.csv.gz")
-```
+labevents <- fread("labevents_filtered_itemid.csv.gz", 
+                   col.names = c("subjectid", "hadmid", "itemid", "charttime", 
+                   "valuenum"))
 
-```{r}
-#labevents$V3
-
-want.id <- c(50912, 50971, 50983, 50902, 50882, 51221, 51301, 50931, 50960, 50893, 50813)
-
-labevents.want <- labevents %>% 
-  filter(V3 %in% want.id)
+want.id <- c(50912, 50971, 50983, 50902, 50882, 51221, 51301, 50931, 50960, 
+             50893, 50813)
 ```
 
 
