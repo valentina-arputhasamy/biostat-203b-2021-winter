@@ -291,14 +291,21 @@ We are interested in the vitals for ICU patients: heart rate, mean and systolic 
 
 `d_items.csv.gz` (<https://mimic-iv.mit.edu/docs/datasets/icu/d_items/>) is the dictionary for the `ITEMID` in `CHARTEVENTS.csv`. Find potential values of `ITEMID` that correspond to systolic blood pressure, i.e., `LABEL` contains the string `systolic`. 
 
+The item id for :
+-`Heart Rate` : 220045 
+-`Arterial Blood Pressure systolic`: 220050
+-`Arterial Blood Pressure mean`: 220052
+-`Non Invasive Blood Pressure systolic`: 220179
+-`Non Invasive Blood Pressure mean`: 220181
+-`Temperature Celsius`: 220210
+-`Respiratory Rate`: 223762 
+-`PAR-Oxygen saturation (SpO2)`: 228232
+
 
 ```{r}
 setwd("/usr/203b-data/mimic-iv-derived-data")
 chart_events <- fread("chartevents_filtered_itemid.csv.gz")
-head(chart_events)
-```
 
-```{r}
 setwd("/usr/203b-data/mimic-iv/icu")
 dictionary <- fread("d_items.csv.gz")
 
