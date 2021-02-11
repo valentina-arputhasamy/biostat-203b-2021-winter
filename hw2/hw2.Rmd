@@ -291,6 +291,33 @@ We are interested in the vitals for ICU patients: heart rate, mean and systolic 
 
 `d_items.csv.gz` (<https://mimic-iv.mit.edu/docs/datasets/icu/d_items/>) is the dictionary for the `ITEMID` in `CHARTEVENTS.csv`. Find potential values of `ITEMID` that correspond to systolic blood pressure, i.e., `LABEL` contains the string `systolic`. 
 
+
+```{r}
+setwd("/usr/203b-data/mimic-iv-derived-data")
+chart_events <- fread("chartevents_filtered_itemid.csv.gz")
+head(chart_events)
+```
+
+```{r}
+setwd("/usr/203b-data/mimic-iv/icu")
+dictionary <- fread("d_items.csv.gz")
+
+#heart rate : 220045
+
+dictionary$itemid[dictionary$label %in% c("Heart Rate", "Arterial Blood Pressure systolic", "Arterial Blood Pressure mean", "Non Invasive Blood Pressure systolic", "Non Invasive Blood Pressure mean", "Temperature Celsius", "Respiratory Rate", "PAR-Oxygen saturation")]
+
+chart_events.want <- chart_events %>% filter(V5 %in% c(220045, 220050, 220052, 220179, 220181, 220210, 223762, 228232))
+
+head(chart_events.want)
+```
+
+```{r}
+
+```
+
+
+
+
 ## Q8. Putting things together
 
 Let us create a tibble for all ICU stays, where rows are  
