@@ -346,6 +346,9 @@ icustays %>%
   arrange(intime) %>% 
   distinct(subject_id, .keep_all = T) %>%
   left_join(admissions, by = c("subject_id", "hadm_id")) %>%
-  left_join(patients)
+  left_join(patients, by = "subject_id") %>%
+  mutate(age_at_adm = year(admittime) - anchor_year + anchor_age) %>%
+  filter(age_at_adm > 18) %>%
+  print(width = Inf)
 ```
 
