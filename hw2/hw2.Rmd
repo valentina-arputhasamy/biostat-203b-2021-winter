@@ -337,6 +337,15 @@ and columns contains at least following variables
 - all variables in `icustays.csv.gz`  
 - all variables in `admission.csv.gz`  
 - first lab measurements during ICU stay  
-- first vitals measurement during ICU stay  
-- an indicator variable whether the patient died within 30 days of hospital admission  
+- first vitals measurement during ICU stay  (labevents, chart events)
+- an indicator variable whether the patient died within 30 days of hospital admission 
+
+
+```{r}
+icustays %>% 
+  arrange(intime) %>% 
+  distinct(subject_id, .keep_all = T) %>%
+  left_join(admissions, by = c("subject_id", "hadm_id")) %>%
+  left_join(patients)
+```
 
