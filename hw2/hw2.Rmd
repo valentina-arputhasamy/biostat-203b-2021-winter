@@ -175,8 +175,7 @@ admissions2$admit_month_recode = factor(admissions2$admit_month_recode, levels =
 ```{r}
 admissions2 %>% ggplot(aes(admit_month_recode)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Month") + xlab("month") + ylab("count") + scale_x_discrete() + theme_minimal() + ylim(c(0,45000))
 ```
-### Admission Day of the Month (looks kinda weird, maybe should edit ticks)
-
+### Admission Day of the Month 
 
 ```{r}
 admissions2$admit_date <- day(admissions2$admittime)
@@ -245,8 +244,6 @@ There are 200,226 female patients and 182,994 male patients.
 ```{r}
 patients %>% count(.,gender)
 ```
-
-
 ```{r}
 patients %>% ggplot(aes(gender)) + geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + coord_flip() + ggtitle("Number of Patients by Gender") + xlab("Gender") + theme_minimal() 
 ```
@@ -266,6 +263,7 @@ patients %>% ggplot(aes(anchor_age)) +
 ```
 
 
+
 ## Q6. Lab results
 
 `labevents.csv.gz` (<https://mimic-iv.mit.edu/docs/datasets/hosp/labevents/>) contains all laboratory measurements for patients. 
@@ -280,6 +278,8 @@ labevents <- fread("labevents_filtered_itemid.csv.gz",
 
 want.id <- c(50912, 50971, 50983, 50902, 50882, 51221, 51301, 50931, 50960, 
              50893, 50813)
+
+labevents.want <- labevents %>% filter(itemid %in% want.id)
 ```
 
 
@@ -305,10 +305,16 @@ The item id for :
 ```{r}
 setwd("/usr/203b-data/mimic-iv-derived-data")
 chart_events <- fread("chartevents_filtered_itemid.csv.gz")
+```
 
+
+```{r}
 setwd("/usr/203b-data/mimic-iv/icu")
 dictionary <- fread("d_items.csv.gz")
+```
 
+
+```{r}
 #heart rate : 220045
 
 dictionary$itemid[dictionary$label %in% c("Heart Rate", "Arterial Blood Pressure systolic", "Arterial Blood Pressure mean", "Non Invasive Blood Pressure systolic", "Non Invasive Blood Pressure mean", "Temperature Celsius", "Respiratory Rate", "PAR-Oxygen saturation")]
@@ -317,12 +323,6 @@ chart_events.want <- chart_events %>% filter(V5 %in% c(220045, 220050, 220052, 2
 
 head(chart_events.want)
 ```
-
-```{r}
-
-```
-
-
 
 
 ## Q8. Putting things together
