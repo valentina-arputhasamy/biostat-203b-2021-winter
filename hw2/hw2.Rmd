@@ -220,6 +220,8 @@ admissions2 %>% ggplot(aes(admit_dow)) +
 
 ### Admission Hour (what is unusual?)
 
+Admission hour is distributed rather strangely, with many admissions occuring early in the morning or late at night.
+
 ```{r}
 admissions2$admit_hour <- hour(admissions2$admittime) 
 
@@ -252,10 +254,12 @@ admissions2 %>% ggplot(aes(admission_type)) +
 ### Number of Admissions per Patient
 
 ```{r}
-admissions2 %>% ggplot(aes(subject_id)) +
-  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
-  coord_flip() + ggtitle("Number of Admits by Admission Type") + 
-  xlab("Admission Type") + theme_minimal() 
+nadmit.patient <- admissions2 %>% count(., subject_id)
+nadmit.patient %>% count(.,n) %>% rename("Admit_Days" = "n", 
+                                         "Frequency" = "nn") %>% 
+  ggplot(aes(Admit_Days, Frequency)) + geom_line() +
+  xlab("Number of Admissions") + ylab("Number of Patients") + theme_minimal()
+  
 ```
 
 ### Admission Location
