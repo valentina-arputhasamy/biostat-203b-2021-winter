@@ -1,7 +1,7 @@
 ---
 title: "Biostat 203B Homework 2"
 author: "Valentina Arputhasamy"
-subtitle: Due Feb 5 @ 11:59PM
+subtitle: Due Feb 12 @ 11:59PM
 output:
   html_document:
     toc: yes
@@ -464,7 +464,6 @@ head(labevents)
 ```
 
 
-
 ## Q8. Putting things together
 
 Let us create a tibble for all ICU stays, where rows are  
@@ -481,7 +480,11 @@ and columns contains at least following variables
 - an indicator variable whether the patient died within 30 days of hospital admission 
 
 
-```{r}
+```{r eval=FALSE, include=FALSE}
+admissions$days_til_death <- ceiling((((admissions$deathtime - admissions2$admittime)/60)/60)/24)
+admissions$died_within_30 <- ifelse(admissions$days_til_death <= 30, 1,0) 
+#indicator variable for whether the patient died within 30 days of admission
+
 icustays %>% 
   arrange(intime) %>% 
   distinct(subject_id, .keep_all = T) %>%
@@ -492,5 +495,9 @@ icustays %>%
   left_join(chart_events, by = c("subject_id" = "V1", "hadm_id" ="V2")) %>%
   left_join(labevents, by = c("subject_id" = "subjectid", "hadm_id"="hadmid")) %>%            
   print(width = Inf)
+
+#I wasn't able to run this code using the server (it kept crashing) and unfortunately
+#don't have enough computing power on my laptop to run it locally
+#As a result, I didn't include the output of this code in my knitted file
 ```
 
