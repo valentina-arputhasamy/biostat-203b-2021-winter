@@ -96,36 +96,52 @@ icustays$intime <- ymd_hms(icustays$intime)
 
 icustays$outtime <- ymd_hms(icustays$outtime)
 
-icustays$stayduration <- log(as.double(difftime(icustays$outtime, icustays$intime, units = "days")))
+icustays$stayduration <- log(as.double(difftime(icustays$outtime, 
+                                                icustays$intime, 
+                                                units = "days")))
 ```
 
 ```{r}
-icustays %>% ggplot(aes(stayduration)) + geom_histogram(fill = "lightsteelblue2", color = "lightsteelblue4") + theme_minimal() + ggtitle("ICU Stay Duration") + xlab("Length of ICU Stay \n (Log-Transformed)") + ylab("count")
+icustays %>% ggplot(aes(stayduration)) + 
+  geom_histogram(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  theme_minimal() + ggtitle("ICU Stay Duration") + 
+  xlab("Length of ICU Stay \n (Log-Transformed)") + ylab("count")
 ```
 
 - first ICU unit  
 
 ```{r}
 icustays2 <- icustays 
-icustays2 <- icustays2 %>% mutate(first_careunit_recode = recode(first_careunit, "Coronary Care Unit (CCU)" = "CCU", "Trauma SICU (TSICU)" = "TSICU", "Surgical Intensive Care Unit (SICU)" = "MICU/SICU", "Medical/Surgical Intensive Care Unit (MICU/SICU)" = "MICU/SICU", "Medical Intensive Care Unit (MICU)" = "MICU/SICU", "Cardiac Vascular Intensive Care Unit (CVICU)" = "CIVICU", "Neuro Surgical Intensive Care Unit (Neuro SICU)" = "Neuro SICU"))
+icustays2 <- icustays2 %>% mutate(first_careunit_recode = recode(first_careunit, 
+  "Coronary Care Unit (CCU)" = "CCU", "Trauma SICU (TSICU)" = "TSICU", 
+  "Surgical Intensive Care Unit (SICU)" = "MICU/SICU", 
+  "Medical/Surgical Intensive Care Unit (MICU/SICU)" = "MICU/SICU", 
+  "Medical Intensive Care Unit (MICU)" = "MICU/SICU", 
+  "Cardiac Vascular Intensive Care Unit (CVICU)" = "CIVICU", 
+  "Neuro Surgical Intensive Care Unit (Neuro SICU)" = "Neuro SICU"))
 
-icustays2 %>% ggplot( aes(first_careunit_recode))+ geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + theme_minimal() + ggtitle("Number of Patients by First ICU Type") + xlab("ICU Type") + ylab("count") + coord_flip()
-
-#sum(ifelse(icustays2$last_careunit == "PACU", 1, 0))
-#sum(ifelse(icustays2$first_careunit_recode == "PACU", 1 ,0))
-
+icustays2 %>% ggplot( aes(first_careunit_recode)) + 
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  theme_minimal() + ggtitle("Number of Patients by First ICU Type") + 
+  xlab("ICU Type") + ylab("count") + coord_flip()
 ```
 
 
 - last ICU unit  
 
 ```{r}
-unique(icustays2$first_careunit)
-unique(icustays2$last_careunit)
+icustays2 <- icustays2 %>% mutate(last_careunit_recode = recode(last_careunit, 
+"Coronary Care Unit (CCU)" = "CCU", "Trauma SICU (TSICU)" = "TSICU", 
+"Surgical Intensive Care Unit (SICU)" = "MICU/SICU", 
+"Medical/Surgical Intensive Care Unit (MICU/SICU)" = "MICU/SICU", 
+"Medical Intensive Care Unit (MICU)" = "MICU/SICU", 
+"Cardiac Vascular Intensive Care Unit (CVICU)" = "CVICU", 
+"Neuro Surgical Intensive Care Unit (Neuro SICU)" = "Neuro SICU"))
 
-icustays2 <- icustays2 %>% mutate(last_careunit_recode = recode(last_careunit, "Coronary Care Unit (CCU)" = "CCU", "Trauma SICU (TSICU)" = "TSICU", "Surgical Intensive Care Unit (SICU)" = "MICU/SICU", "Medical/Surgical Intensive Care Unit (MICU/SICU)" = "MICU/SICU", "Medical Intensive Care Unit (MICU)" = "MICU/SICU", "Cardiac Vascular Intensive Care Unit (CVICU)" = "CVICU", "Neuro Surgical Intensive Care Unit (Neuro SICU)" = "Neuro SICU"))
-
-icustays2 %>% ggplot(aes(last_careunit_recode)) + geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + theme_minimal() + ggtitle("Number of Patients by Last ICU Type") + xlab("ICU Type") + ylab("count") + coord_flip()
+icustays2 %>% ggplot(aes(last_careunit_recode)) + 
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  theme_minimal() + ggtitle("Number of Patients by Last ICU Type") + 
+  xlab("ICU Type") + ylab("count") + coord_flip()
 ```
 
 ## Q4. `admission` data
@@ -136,16 +152,16 @@ Information of the patients admitted into hospital is available in `ADMISSION.cs
 - admission month (done) 
 - admission month day (done) 
 - admission week day (done)
-- admission hour (anything unusual?)  : not sure what he thinks is unusual
+- admission hour (anything unusual?)
 - number of deaths in each year  (done)
 - admission type (done)
-- number of admissions per patient  
-- admission location  
-- discharge location  
-- insurance  
-- language  
-- martial status  
-- ethnicity  
+- number of admissions per patient (done)
+- admission location (done)
+- discharge location  (done)
+- insurance (done)
+- language (done)  
+- martial status (done)  
+- ethnicity (done)
 - death 
 
 ```{r}
@@ -158,7 +174,9 @@ admissions <- read_csv("admissions.csv.gz")
 ```{r}
 admissions$admit_year <- year(admissions$admittime)
 
-admissions %>% ggplot(aes(admit_year)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Year") + xlab("year") + theme_minimal()
+admissions %>% ggplot(aes(admit_year)) + 
+  geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  ggtitle("Number of Admits by Year") + xlab("year") + theme_minimal()
 ```
 
 ### Admission Month
@@ -166,37 +184,49 @@ admissions %>% ggplot(aes(admit_year)) + geom_bar(binwidth = 1, fill = "lightste
 ```{r}
 admissions$admit_month <- month(admissions$admittime) 
 
-admissions2 <- admissions %>% mutate(admit_month_recode = recode(admit_month, "1" = "Jan", "2" = "Feb", "3" = "Mar", "4" = "Apr", "5" = "May", "6" = "Jun", "7" = "Jul", "8" = "Aug", "9" = "Sep", "10" = "Oct", "11" = "Nov", "12" = "Dec")) 
+admissions2 <- admissions %>% mutate(admit_month_recode = recode(admit_month, 
+"1" = "Jan", "2" = "Feb", "3" = "Mar", "4" = "Apr", "5" = "May", "6" = "Jun", 
+"7" = "Jul", "8" = "Aug", "9" = "Sep", "10" = "Oct", "11" = "Nov", 
+"12" = "Dec")) 
 
-admissions2$admit_month_recode = factor(admissions2$admit_month_recode, levels = month.abb)
+admissions2$admit_month_recode = factor(admissions2$admit_month_recode, 
+                                        levels = month.abb)
+
+admissions2 %>% ggplot(aes(admit_month_recode)) + 
+  geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  ggtitle("Number of Admits by Month") + xlab("month") + ylab("count") + 
+  scale_x_discrete() + theme_minimal() + ylim(c(0,45000))
 ```
 
-
-```{r}
-admissions2 %>% ggplot(aes(admit_month_recode)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Month") + xlab("month") + ylab("count") + scale_x_discrete() + theme_minimal() + ylim(c(0,45000))
-```
 ### Admission Day of the Month 
 
 ```{r}
 admissions2$admit_date <- day(admissions2$admittime)
 
-admissions2 %>% ggplot(aes(admit_date)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Day of the Month") + xlab("Day of the Month")
+admissions2 %>% ggplot(aes(admit_date)) + 
+  geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  ggtitle("Number of Admits by Day of the Month") + xlab("Day of the Month")
 ```
-
 
 ### Admissions Day of the Week
 
 ```{r}
 admissions2$admit_dow <- wday(admissions2$admittime, label = T)
 
-admissions2 %>% ggplot(aes(admit_dow)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Day of the Week") + xlab("Day of the Week")
+admissions2 %>% ggplot(aes(admit_dow)) + 
+  geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  ggtitle("Number of Admits by Day of the Week") + xlab("Day of the Week")
 ```
+
 ### Admission Hour (what is unusual?)
 
 ```{r}
 admissions2$admit_hour <- hour(admissions2$admittime) 
 
-admissions2 %>% ggplot(aes(admit_hour)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Admits by Hour") + xlab("Hour") + theme_minimal() + scale_x_continuous(n.breaks = 10)
+admissions2 %>% ggplot(aes(admit_hour)) + 
+  geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  ggtitle("Number of Admits by Hour") + xlab("Hour") + theme_minimal() + 
+  scale_x_continuous(n.breaks = 10)
 ```
 
 ### Number of Deaths in Each Year
@@ -204,21 +234,96 @@ admissions2 %>% ggplot(aes(admit_hour)) + geom_bar(binwidth = 1, fill = "lightst
 ```{r}
 admissions2$death_year <- year(admissions2$deathtime)
 
-admissions2 %>% ggplot(aes(death_year)) + geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + ggtitle("Number of Deaths per Year") + xlab("Year") + ylab("Number of Deaths") + theme_minimal()
+admissions2 %>% ggplot(aes(death_year)) + 
+  geom_bar(binwidth = 1, fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  ggtitle("Number of Deaths per Year") + xlab("Year") + 
+  ylab("Number of Deaths") +theme_minimal()
 ```
-
 
 ### Admission Type
 
 ```{r}
-admissions2 %>% ggplot(aes(admission_type)) + geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + coord_flip() + ggtitle("Number of Admits by Admission Type") + xlab("Admission Type") + theme_minimal() 
+admissions2 %>% ggplot(aes(admission_type)) + 
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  coord_flip() + ggtitle("Number of Admits by Admission Type") + 
+  xlab("Admission Type") + theme_minimal() 
 ```
 
 ### Number of Admissions per Patient
 
 ```{r}
-
+admissions2 %>% ggplot(aes(subject_id)) +
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  coord_flip() + ggtitle("Number of Admits by Admission Type") + 
+  xlab("Admission Type") + theme_minimal() 
 ```
+
+### Admission Location
+
+```{r}
+admissions2 %>% ggplot(aes(admission_location)) +
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  coord_flip() + ggtitle("Number of Admits by Admit Location") + 
+  xlab("Location") + theme_minimal() 
+```
+
+### Discharge Location
+
+```{r}
+admissions2 %>% ggplot(aes(discharge_location)) +
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  coord_flip() + ggtitle("Number of Admits by Discharge Location") + 
+  xlab("Location") + theme_minimal() 
+```
+
+### Insurance
+
+```{r}
+admissions2 %>% distinct(subject_id, .keep_all = T) %>% 
+  ggplot(aes(insurance)) +
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  coord_flip() + ggtitle("Number of Admits by Insurance Type") + 
+  xlab("Insurance") + theme_minimal() 
+```
+
+### Language 
+
+```{r}
+admissions2 <- admissions2 %>% mutate(language_recode = recode(language, "?" = "Unknown"))
+
+admissions2 %>% distinct(subject_id, .keep_all = T) %>%
+  ggplot(aes(language_recode)) +
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  coord_flip() + ggtitle("Number of Admits by Language") + 
+  xlab("Language") + theme_minimal() 
+```
+
+### Marital Status
+
+```{r}
+admissions2 %>% distinct(subject_id, .keep_all = T) %>%
+  ggplot(aes(marital_status)) +
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  coord_flip() + ggtitle("Number of Admits by Marital Status") + 
+  xlab("Marital Status") + theme_minimal() 
+```
+
+### Ethnicity
+
+```{r}
+admissions2 %>% distinct(subject_id, .keep_all = T) %>%
+  ggplot(aes(ethnicity)) +
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  coord_flip() + ggtitle("Number of Admits by Ethnicity") + 
+  xlab("Ethnicity") + theme_minimal() 
+```
+
+### Death
+
+```{r}
+admissionyn <- mutate_all(replace(admissions2, is.na(admissions2$death_year), 0)) 
+```
+
 
 
 Note it is possible that one patient (uniquely identified by the `SUBJECT_ID`) is admitted into hospital multiple times. When summarizing some demographic information, it makes sense to summarize based on unique patients. 
@@ -322,7 +427,11 @@ dictionary$itemid[dictionary$label %in% c("Heart Rate", "Arterial Blood Pressure
 chart_events.want <- chart_events %>% filter(V5 %in% c(220045, 220050, 220052, 220179, 220181, 220210, 223762, 228232))
 
 head(chart_events.want)
+head(chart_events)
+
+head(labevents)
 ```
+
 
 
 ## Q8. Putting things together
@@ -349,6 +458,8 @@ icustays %>%
   left_join(patients, by = "subject_id") %>%
   mutate(age_at_adm = year(admittime) - anchor_year + anchor_age) %>%
   filter(age_at_adm > 18) %>%
+  left_join(chart_events, by = c("subject_id" = "V1", "hadm_id" ="V2")) %>%
+  left_join(labevents, by = c("subject_id" = "subjectid", "hadm_id"="hadmid")) %>%            
   print(width = Inf)
 ```
 
