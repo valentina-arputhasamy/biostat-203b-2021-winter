@@ -48,6 +48,8 @@ At this moment, you should already get credentialed on the PhysioNet. Please inc
 
 ![PhysioNet Credential](biostat-203b-2021-winter/hw2/PhysioNet Credential.png)
 
+Not sure if imaged uploaded. Can email if necessary.
+
 ## Q2. `read.csv` (base R) vs `read_csv` (tidyverse) vs `fread` (data.table)
 
 There are quite a few utilities in R for reading data files. Let us test the speed of reading a moderate sized compressed csv file, `admissions.csv.gz`, by three programs: `read.csv` in base R, `read_csv` in tidyverse, and `fread` in the popular data.table package. Is there any speed difference?
