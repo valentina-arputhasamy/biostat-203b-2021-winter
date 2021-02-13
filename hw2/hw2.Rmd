@@ -481,6 +481,10 @@ and columns contains at least following variables
 - first vitals measurement during ICU stay  (labevents, chart events)
 - an indicator variable whether the patient died within 30 days of hospital admission 
 
+I wasn't able to run this code using the server (it kept crashing) and unfortunately
+don't have enough computing power on my laptop to run it locally.
+As a result, I didn't include the output of this code in my knitted file
+
 
 ```{r eval=FALSE, include=FALSE}
 admissions$days_til_death <- ceiling((((admissions$deathtime - admissions2$admittime)/60)/60)/24)
