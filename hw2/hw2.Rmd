@@ -278,6 +278,8 @@ admissions2 %>% ggplot(aes(discharge_location)) +
 
 ### Insurance
 
+For insurance, I thought it would make sense to summarize based on unique patients.
+
 ```{r}
 admissions2 %>% distinct(subject_id, .keep_all = T) %>% 
   ggplot(aes(insurance)) +
@@ -288,8 +290,11 @@ admissions2 %>% distinct(subject_id, .keep_all = T) %>%
 
 ### Language 
 
+For language, I thought it would make sense to summarize based on unique patients.
+
 ```{r}
-admissions2 <- admissions2 %>% mutate(language_recode = recode(language, "?" = "Unknown"))
+admissions2 <- admissions2 %>% mutate(language_recode = 
+                                        recode(language, "?" = "Unknown"))
 
 admissions2 %>% distinct(subject_id, .keep_all = T) %>%
   ggplot(aes(language_recode)) +
@@ -299,6 +304,8 @@ admissions2 %>% distinct(subject_id, .keep_all = T) %>%
 ```
 
 ### Marital Status
+
+For marital status, I thought it would make sense to summarize based on unique patients.
 
 ```{r}
 admissions2 %>% distinct(subject_id, .keep_all = T) %>%
@@ -310,6 +317,8 @@ admissions2 %>% distinct(subject_id, .keep_all = T) %>%
 
 ### Ethnicity
 
+For ethnicity, I thought it would make sense to summarize based on unique patients.
+
 ```{r}
 admissions2 %>% distinct(subject_id, .keep_all = T) %>%
   ggplot(aes(ethnicity)) +
@@ -318,15 +327,21 @@ admissions2 %>% distinct(subject_id, .keep_all = T) %>%
   xlab("Ethnicity") + theme_minimal() 
 ```
 
-### Death
+### Deaths
+
+For deaths, I thought it would make sense to summarize based on unique patients.
 
 ```{r}
-admissionyn <- mutate_all(replace(admissions2, is.na(admissions2$death_year), 0)) 
+admissions2$death_yn[is.na(admissions2$death_year)] <- 0
+
+admissions2$death_yn <- ifelse(admissions2$death_yn == 0, "Survived", "Died") 
+
+admissions2 %>% distinct(subject_id, .keep_all = T) %>% ggplot(aes(death_yn)) + 
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  ggtitle("Number of Deaths") + xlab("Survival Status") + 
+  theme_minimal() + scale_y_continuous()
 ```
 
-
-
-Note it is possible that one patient (uniquely identified by the `SUBJECT_ID`) is admitted into hospital multiple times. When summarizing some demographic information, it makes sense to summarize based on unique patients. 
 
 ## Q5. `patient` data
 
@@ -350,7 +365,10 @@ There are 200,226 female patients and 182,994 male patients.
 patients %>% count(.,gender)
 ```
 ```{r}
-patients %>% ggplot(aes(gender)) + geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + coord_flip() + ggtitle("Number of Patients by Gender") + xlab("Gender") + theme_minimal() 
+patients %>% ggplot(aes(gender)) + 
+  geom_bar(fill = "lightsteelblue2", color = "lightsteelblue4") + 
+  coord_flip() + ggtitle("Number of Patients by Gender") + 
+  xlab("Gender") + theme_minimal() 
 ```
 
 ### Anchor Age
@@ -422,9 +440,18 @@ dictionary <- fread("d_items.csv.gz")
 ```{r}
 #heart rate : 220045
 
-dictionary$itemid[dictionary$label %in% c("Heart Rate", "Arterial Blood Pressure systolic", "Arterial Blood Pressure mean", "Non Invasive Blood Pressure systolic", "Non Invasive Blood Pressure mean", "Temperature Celsius", "Respiratory Rate", "PAR-Oxygen saturation")]
+dictionary$itemid[dictionary$label %in% c("Heart Rate", 
+                                          "Arterial Blood Pressure systolic", 
+                                          "Arterial Blood Pressure mean", 
+                                          "Non Invasive Blood Pressure systolic", 
+                                          "Non Invasive Blood Pressure mean", 
+                                          "Temperature Celsius", 
+                                          "Respiratory Rate", 
+                                          "PAR-Oxygen saturation")]
 
-chart_events.want <- chart_events %>% filter(V5 %in% c(220045, 220050, 220052, 220179, 220181, 220210, 223762, 228232))
+chart_events.want <- chart_events %>% filter(V5 %in% c(220045, 220050, 220052, 
+                                                       220179, 220181, 220210, 
+                                                       223762, 228232))
 
 head(chart_events.want)
 head(chart_events)
