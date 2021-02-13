@@ -148,20 +148,20 @@ icustays2 %>% ggplot(aes(last_careunit_recode)) +
 
 Information of the patients admitted into hospital is available in `ADMISSION.csv.gz`. See <https://mimic-iv.mit.edu/docs/datasets/core/admissions/> for details of each field in this file. Summarize following variables using appropriate graphs. Explain any patterns you observe.   
 
-- admission year (done) 
-- admission month (done) 
-- admission month day (done) 
-- admission week day (done)
+- admission year  
+- admission month  
+- admission month day 
+- admission week day 
 - admission hour (anything unusual?)
-- number of deaths in each year  (done)
-- admission type (done)
-- number of admissions per patient (done)
-- admission location (done)
-- discharge location  (done)
-- insurance (done)
-- language (done)  
-- martial status (done)  
-- ethnicity (done)
+- number of deaths in each year  
+- admission type 
+- number of admissions per patient 
+- admission location 
+- discharge location  
+- insurance 
+- language   
+- martial status  
+- ethnicity 
 - death 
 
 ```{r}
