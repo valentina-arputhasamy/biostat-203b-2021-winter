@@ -1,8 +1,8 @@
-*XXX XXX*
+*Valentina Arputhasamy*
 
-### Overall Grade: ???/170
+### Overall Grade: 164/170
 
-### Quality of report: ??/10
+### Quality of report: 10/10
 
 -   Is the homework submitted (git tag time) before deadline? 
 
@@ -14,28 +14,32 @@
 
 ### Completeness, correctness and efficiency of solution: ??/120
 
-- Q1 (??/10)
+- Q1 (10/10)
 
 If no PhysioNet crediential with matching name is present, take 10 points off. They can get points back if present the credential later.
 
-- Q2 (??/10)
+- Q2 (10/10)
 
 `read.csv` should be at least 10x slower than `read_csv`. `read_csv` should be about 2-3x slower than `fread`.
 
-- Q3 (??/10)
+- Q3 (10/10)
 
-- Q4 (??/20)
+- Q4 (20/20)
 
-- Q5 (??/10)
+The aesthetic parameter for **geom_bar**, **binwidth** should be **bindwidth**.
 
-- Q6 (??/20)
+- Q5 (10/10)
 
-- Q7 (??/20)
+- Q6 (20/20)
 
-- Q8 (??/20)
+- Q7 (20/20)
+
+- Q8 (15/20)
+
+No knitted output, codes only. -5
 
 	    
-### Usage of Git: ??/10
+### Usage of Git: 10/10
 
 -   Are branches (`master` and `develop`) correctly set up? Is the hw submission put into the `master` branch?
 
@@ -47,7 +51,7 @@ If no PhysioNet crediential with matching name is present, take 10 points off. T
   
 -   Do not put a lot auxiliary files into version control. If any unnecessary files are in Git, take 5 points off.
 
-### Reproducibility: ??/10
+### Reproducibility: 10/10
 
 This HW might be difficult to check reproducibility. 
 
@@ -55,11 +59,13 @@ This HW might be difficult to check reproducibility.
 
 -   If necessary, are there clear instructions, either in report or in a separate file, how to reproduce the results?
 
-### R code style: ??/20
+### R code style: 19/20
 
 Each violation takes 2 points off, until all 20 points are depleted.
 
 -   [Rule 2.5](https://style.tidyverse.org/syntax.html#long-lines) The maximum line length is 80 characters.  
+
+Line 490 -1.
 
 -   [Rule 2.4.1](https://style.tidyverse.org/syntax.html#indenting) When indenting your code, use two spaces.  
 
