@@ -20,14 +20,17 @@ demtable <- icu_cohort %>%
   select(subject_id, gender, age_at_adm, ethnicity, language, marital_status )
 
 labtable <- icu_cohort %>%
-  select(bicarbonate, calcium, chloride, creatinine, glucose, magnesium, potassium, sodium, hematocrit, lactate)
+  select(bicarbonate, calcium, chloride, creatinine, glucose, magnesium,
+         potassium, sodium, hematocrit, lactate)
 
-colnames(labtable) <- c("Bicarbonate", "Calcium", "Chloride", "Creatinine", "Glucose", "Magnesium", 
+colnames(labtable) <- c("Bicarbonate", "Calcium", "Chloride", 
+                        "Creatinine", "Glucose", "Magnesium", 
                         "Potassium", "Sodium", "Hematocrit", "Lactate")
 
 demtable$language <- ifelse(demtable$language == "?", "Unknown", "English" )
 
-colnames(demtable) <- c("Subject ID", "Gender", "Age (years)", "Ethnicity", "Language", "Marital Status")
+colnames(demtable) <- c("Subject ID", "Gender", "Age (years)", "Ethnicity", 
+                        "Language", "Marital Status")
 
 demtable$Gender <- as.factor(demtable$Gender)
 demtable$Ethnicity <- as.factor(demtable$Ethnicity)
@@ -43,45 +46,46 @@ ui <- fluidPage(
   titlePanel("MIMIC-IV Data Visualization"),
   
   navbarPage("MIMIC Data", theme = shinytheme("lumen"),
-             tabPanel("Demographics", fluid = T ),
+             tabPanel("Demographics", #first tab for demographics
                  titlePanel("Demographic Charts"),
              sidebarLayout(
                sidebarPanel(
                  radioButtons("demchoice",
-                             "Select Demographic Type:", c("Gender", "Age (years)", "Ethnicity", "Language", "Marital Status"))),
+                             "Select Demographic Type:", c("Gender", 
+                                                           "Age (years)", 
+                                                           "Ethnicity", 
+                                                           "Language", 
+                                                           "Marital Status"))),
                mainPanel(plotOutput("demPlot"))),
              
                titlePanel("Summary Statistics"),
              sidebarLayout(
                sidebarPanel(
-                 selectInput("demsumm", "Select Demographic Type:", c("Gender", "Ethnicity", "Language", "Marital Status"))),
+                 selectInput("demsumm", "Select Demographic Type:", 
+                             c("Gender", "Ethnicity", "Language", 
+                               "Marital Status"))),
                 mainPanel(
-                  #verbatimText,
                   tableOutput("demsumtable"))),
                   
                   titlePanel("Table of Values"),
                   sidebarLayout(
                     sidebarPanel(
-                      numericInput("obstable", "Number of observations to view (max: 50,048)", 10, max = 50048)),
+                      numericInput("obstable", 
+                                   "Number of observations (max: 50,048):", 
+                                   10, max = 50048)),
                     mainPanel(
-                      tableOutput("view"))),
-             
-             tabPanel("Lab Measurements & Vitals", fluid = T),
-             titlePanel("Lab Measurement Distributions"),
-             sidebarLayout(
-               sidebarPanel(
-                 radioButtons("")
-               )
-             )
-             
-             
-             )
+                      tableOutput("view")))),
   
+              tabPanel("Lab Measurements",
+                       titlePanel("Lab Measurement Distributions"),
+                       sidebarLayout(
+                         sidebarPanel(
+                         radioButtons("labchoice", "Select Lab Measurement:", c("Bicarbonate", "Calcium", "Creatinine", "Glucose", "Magnesium", "Potassium",
+                                                     "Sodium", "Hematocrit", "Lactate")),
+                         numericInput("obslab", "Number of observations (max: 50,048)", 25000, max = 50048)),
+                       mainPanel(
+                         plotOutput("labplot"))))))
   
-  
-  
-  )
-                    
 
 
 server <- function(input, output) {
@@ -109,7 +113,12 @@ server <- function(input, output) {
     output$view <- renderTable({
       
       head(demtable, n = input$obstable)
-     
+    })
+      
+    output$labplot <- renderPlot({
+      ggplot(labtable, aes(eval(as.name(input$labchoice)))) + 
+        geom_histogram(binwidth = 1, fill="lightsteelblue2", color = "lightsteelblue4") +
+        xlab(input$labchoice) 
     })
     
         
