@@ -18,6 +18,10 @@ Load database libraries and the tidyverse frontend:
 library(tidyverse)
 library(lubridate)
 library(miceRanger)
+<<<<<<< HEAD
+=======
+library(glmnet)
+>>>>>>> develop
 ```
 
 ## Q1. Missing data
@@ -64,8 +68,24 @@ nrow(icu_cohort2)
 
 4. Impute missing values by `miceRanger` (request $m=3$ datasets). This step is very computational intensive. Make sure to save the imputation results as a file.
 
+<<<<<<< HEAD
 ```{r}
 impute <- miceRanger(icu_cohort2, m = 3, vars = c("marital_status", "bicarbonate", "calcium", "chloride", "creatinine", "glucose", "magnesium", "potassium", "sodium", "hematocrit", "wbc", "heart_rate", "non_invasive_blood_pressure_systolic", "non_invasive_blood_pressure_mean", "respiratory_rate", "temperature_fahrenheit"), max.depth = 10, returnModels = TRUE) 
+=======
+```{r eval=FALSE, include=FALSE}
+impute <- miceRanger(icu_cohort2, m = 3, vars = c("marital_status", 
+                                                  "bicarbonate", "calcium", 
+                                                  "chloride", "creatinine", 
+                                                  "glucose", "magnesium", 
+                                                  "potassium", "sodium", 
+                                                  "hematocrit", "wbc", 
+                                                  "heart_rate", 
+                                                  "non_invasive_blood_pressure_systolic", 
+                                                  "non_invasive_blood_pressure_mean", 
+                                                  "respiratory_rate", 
+                                                  "temperature_fahrenheit"), 
+                     max.depth = 10, returnModels = TRUE) 
+>>>>>>> develop
 
 # if(file.exists(str_c("./impute.RData"))){
 #   load(str_c("./impute.RData"))
@@ -76,7 +96,11 @@ impute <- miceRanger(icu_cohort2, m = 3, vars = c("marital_status", "bicarbonate
 # }
 ```
 
+<<<<<<< HEAD
 ```{r}
+=======
+```{r eval=FALSE, include=FALSE}
+>>>>>>> develop
 save(impute, file = "./impute.RData")
 ```
 
@@ -84,6 +108,7 @@ save(impute, file = "./impute.RData")
 5. Make imputation diagnostic plots and explain what they mean.
 
 ```{r}
+<<<<<<< HEAD
 micedf <- load("impute.RData")
 ```
 
@@ -105,6 +130,67 @@ plotModelError(impute,vars=c("marital_status", "bicarbonate", "calcium", "chlori
 
 ```{r plotVarImportance, fig.align = 'center', fig.width=10}
 plotVarImportance(impute, 
+=======
+micedf <- load("~/biostat-203b-2021-winter/hw 4/impute.RData")
+```
+
+###Distribution of Imputed Values
+
+We can take a look at the imputed distributions compared to the original distribution for each variable.
+The red line is the density of the original, nonmissing data. The smaller, black lines are the density of the imputed values in each of the datasets. 
+
+```{r}
+plotDistributions(micedf ,vars= c("marital_status", "bicarbonate", "calcium", 
+                                 "chloride", "creatinine", "glucose", 
+                                 "magnesium", "potassium", "sodium", 
+                                 "hematocrit", "wbc", "heart_rate", 
+                                 "non_invasive_blood_pressure_systolic", 
+                                 "non_invasive_blood_pressure_mean", 
+                                 "respiratory_rate", "temperature_fahrenheit"))
+```
+
+```{r}
+plotCorrelations(micedf,vars=c("marital_status", "bicarbonate", "calcium", 
+                               "chloride", "creatinine", "glucose", "magnesium", 
+                               "potassium", "sodium", "hematocrit", "wbc", 
+                               "heart_rate", 
+                               "non_invasive_blood_pressure_systolic", 
+                               "non_invasive_blood_pressure_mean", 
+                               "respiratory_rate", "temperature_fahrenheit"))
+```
+###Convergence of Correlation
+
+The plotCorrelations function shows you a boxplot of the correlations between imputed values in every combination of datasets, at each iteration.
+
+```{r}
+plotVarConvergence(micedf,vars=c("marital_status", "bicarbonate", "calcium", 
+                                 "chloride", "creatinine", "glucose", 
+                                 "magnesium", "potassium", "sodium", 
+                                 "hematocrit", "wbc", "heart_rate", 
+                                 "non_invasive_blood_pressure_systolic", 
+                                 "non_invasive_blood_pressure_mean", 
+                                 "respiratory_rate", "temperature_fahrenheit"))
+```
+###Center and Dispersion Convergence
+
+Sometimes, if the missing data locations are correlated with higher or lower values, multiple iterations need to be run for the process to converge to the true theoretical mean (given the information that exists in the dataset). Using this plot we can see if the imputed data converged, or if we need to run more iterations.
+
+```{r}
+plotModelError(micedf,vars=c("marital_status", "bicarbonate", "calcium", 
+                             "chloride", "creatinine", "glucose", "magnesium", 
+                             "potassium", "sodium", "hematocrit", "wbc", 
+                             "heart_rate", 
+                             "non_invasive_blood_pressure_systolic", 
+                             "non_invasive_blood_pressure_mean", 
+                             "respiratory_rate", "temperature_fahrenheit"))
+```
+###Variable Importance
+
+Below we plot the variable importance for each imputed variable. The top axis contains the variable that was used to impute the variable on the left axis.
+
+```{r plotVarImportance, fig.align = 'center', fig.width=10}
+plotVarImportance(micedf, 
+>>>>>>> develop
                   tl.cex = 0.7, 
                   cl.cex = 0.7, cl.ratio = 0.1, cl.align.text = "l", 
                   number.cex = 0.5)
@@ -112,6 +198,7 @@ plotVarImportance(impute,
 
 6. Obtain a complete data set by averaging the 3 imputed data sets.
 
+<<<<<<< HEAD
 ```{r}
 dataset1 <- dataset1 %>%  mutate_if(is.character, as.factor) 
 
@@ -124,21 +211,39 @@ ImputedList <- completeData(impute)
 df1 <- ImputedList$Dataset_1
 df2 <- ImputedList$Dataset_2
 df3 <- ImputedList$Dataset_3
+=======
+
+```{r}
+#ImputedList <- completeData(micedf)
+df1 <- ImputedList$Dataset_1 
+df2 <- ImputedList$Dataset_2 
+df3 <- ImputedList$Dataset_3 
+>>>>>>> develop
 
 #converting characters into factors, then numeric
 
 df1 <- df1 %>% mutate_if(is.character, as.factor) %>% 
   mutate_if(is.factor, as.numeric) 
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> develop
 df2 <- df2 %>% mutate_if(is.character, as.factor) %>% 
   mutate_if(is.factor, as.numeric) 
 
 df3 <- df3 %>% mutate_if(is.character, as.factor) %>% 
+<<<<<<< HEAD
   mutate_if(is.factor, as.numeric) 
+=======
+   mutate_if(is.factor, as.numeric) 
+
+>>>>>>> develop
 
 #selecting necessary columns for logistic regression (q2) before averaging 
 ##datasets
 
+<<<<<<< HEAD
 colnames(df1)
 df1 <- df1 %>% select(subject_id, gender, age_at_adm, marital_status, 
                       ethnicity, died.within.30)
@@ -146,15 +251,45 @@ df2 <- df2 %>% select(subject_id, gender, age_at_adm, marital_status, ethnicity,
                       died.within.30)
 df3 <- df3 %>% select(subject_id, gender, age_at_adm, marital_status, ethnicity, 
                       died.within.30)
+=======
+df1 <- df1 %>% select(subject_id, gender, age_at_adm, marital_status, 
+                      ethnicity, bicarbonate, calcium, chloride, creatinine, 
+                      glucose, magnesium, potassium, sodium, hematocrit,
+                      wbc, heart_rate, non_invasive_blood_pressure_systolic, 
+                      non_invasive_blood_pressure_mean, respiratory_rate,
+                      temperature_fahrenheit, died.within.30)
+df2 <- df2 %>% select(subject_id, gender, age_at_adm, marital_status, 
+                      ethnicity, bicarbonate, calcium, chloride, creatinine, 
+                      glucose, magnesium, potassium, sodium, hematocrit,
+                      wbc, heart_rate, non_invasive_blood_pressure_systolic, 
+                      non_invasive_blood_pressure_mean, respiratory_rate,
+                      temperature_fahrenheit, died.within.30)
+df3 <- df3 %>% select(subject_id, gender, age_at_adm, marital_status, 
+                      ethnicity, bicarbonate, calcium, chloride, creatinine, 
+                      glucose, magnesium, potassium, sodium, hematocrit,
+                      wbc, heart_rate, non_invasive_blood_pressure_systolic, 
+                      non_invasive_blood_pressure_mean, respiratory_rate,
+                      temperature_fahrenheit, died.within.30)
+>>>>>>> develop
 
 #averaging datasets
 
 av_df <- (df1 + df2 + df3)/3
 
+<<<<<<< HEAD
 av_df <- av_df %>% round(av_df$marital_status) %>% 
   mutate_if(is.numeric, as.factor) 
 
 as.data.frame(av_df)
+=======
+av_df$marital_status <- round(av_df$marital_status)
+
+av_df <- av_df %>% mutate_at(c("gender",
+              "marital_status",
+              "ethnicity"),
+            function(x)as.factor(x))
+
+>>>>>>> develop
 ```
 
 
@@ -162,6 +297,11 @@ as.data.frame(av_df)
 
 Develop at least two analytic approaches for predicting the 30-day mortality of patients admitted to ICU using demographic information (gender, age, marital status, ethnicity), first lab measurements during ICU stay, and first vital measurements during ICU stay. For example, you can use (1) logistic regression (`glm()` function), (2) logistic regression with lasso penalty (glmnet package), (3) random forest (randomForest package), or (4) neural network.
 
+<<<<<<< HEAD
+=======
+- Option 1: Logistic Regression 
+
+>>>>>>> develop
 1. Partition data into 80% training set and 20% test set. Stratify partitioning according the 30-day mortality status.
 
 ```{r}
@@ -175,8 +315,108 @@ test_set <- anti_join(av_df, training_set)
 2. Train the models using the training set.
 
 ```{r}
+<<<<<<< HEAD
 glm
+=======
+lmod <- glm(died.within.30 ~ . -subject_id, family = binomial, training_set)
+>>>>>>> develop
 ```
 
 
 3. Compare model prediction performance on the test set.
+<<<<<<< HEAD
+=======
+
+```{r}
+predprob = predict.glm(lmod, test_set, type = "response")
+
+test_set$predout <- ifelse(predprob > 0.5, 1, 0)
+
+xtabs(~ died.within.30 + predout , data = test_set)
+
+#error rate
+
+(75 + 939)/(8900 + 75 + 939 + 97)
+
+#sensitivity (probability that the model correctly predicts death)
+
+97/(939 + 97)
+
+
+#specificity (probability that the model correctly predicts survival)
+
+8900/(8900 + 75)
+```
+
+We can calculate the error rate using the contingency table above. The error rate is 0.1012886. 
+
+The sensitivity of the model (probability that the model correctly predicts death) is 10%. 
+
+The specificity of the model (probability that the model correctly predicts survival) is 99%. 
+
+- Option 2: Logistic Regression with Lasso Penalty (glmnet package)
+
+1. Partition data into 80% training set and 20% test set. Stratify partitioning according the 30-day mortality status.
+
+Already done in option 1
+
+2. Train the models using the training set.
+
+First we fit a logistic regression with lasso penalty using the glmnet package.
+
+```{r}
+
+#The glmnet package takes a matrix (of predictors) and a vector (of responses) 
+##as input, so I reformatted my data
+
+#training X and Y
+x_train <- training_set %>% ungroup() %>% select(-died.within.30) %>% as.matrix()
+y_train <- training_set$died.within.30
+
+#validation/testing set
+
+x_val <- test_set %>% ungroup() %>% select(c(-died.within.30, -predout)) %>% data.matrix()
+y_val <- test_set$died.within.30
+
+#fit lasso regression
+
+lasso_fit <- glmnet(x_train, y_train, family = "binomial", alpha = 1)
+
+summary(lasso_fit)
+plot(lasso_fit, xvar = "lambda", label = TRUE)
+```
+
+3. Compare model prediction performance on the test set.
+
+Now we can evaluate the peformance of various models (corresponding to different $\lambda$ values on the validation set). From the graph, it appears that the lowest deviance on the validation set corresponds to the smallest value of $\lambda$, which is 0.0002707682 (~.0003).
+
+```{r}
+# predict validation case probabilities at different \lambda values and calculate test deviance
+pred_val <- predict(object = lasso_fit, newx =  as(x_val, "dgCMatrix"), type = "response", s = lasso_fit$lambda)
+dev_val <- -2 * colSums(y_val * log(pred_val) + (1 - y_val) * log(1 - pred_val))
+tibble(lambda = lasso_fit$lambda, dev_val = dev_val) %>%
+  ggplot() + 
+  geom_point(mapping = aes(x = lambda, y = dev_val)) + 
+  scale_x_log10() +
+  labs(y = "Binomial deviance on validation set", x = "Lambda")
+
+#min(lasso_fit$lambda)
+```
+Now we'll predict the probability of 30 day mortality using the optimal value of $\lambda$ (approximately .0003) as determined above.
+
+```{r}
+predprob_lasso <- predict(object = lasso_fit, newx =  as(x_val, "dgCMatrix"), type = "response", s = 0.0002707682)
+
+test_set$predout_lasso <- ifelse(predprob > 0.5, 1, 0)
+
+xtabs(~ died.within.30 + predout_lasso , data = test_set)
+
+```
+
+The sensitivity of the lasso model (probability that the model correctly predicts death) is 10%. 
+
+The specificity of the lasso model (probability that the model correctly predicts survival) is 99%. 
+
+This isn't surprising because the value of $\lambda$ that was determined to be optimal was extremely close to zero. 
+When $\lambda$ = 0, the regression coefficients of the lasso regression will be the sae as those from regular logistic regression. 
+>>>>>>> develop
