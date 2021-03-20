@@ -1,0 +1,182 @@
+---
+title: 'Biostat 203B Homework 4'
+author: "Valentina Arputhasamy"
+date: "3/18/2021"
+output: html_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+                      
+Display machine information:
+```{r}
+sessionInfo()
+```
+Load database libraries and the tidyverse frontend:
+```{r}
+library(tidyverse)
+library(lubridate)
+library(miceRanger)
+```
+
+## Q1. Missing data
+
+Through the Shiny app developed in HW3, we observe abundant missing values in the MIMIC-IV ICU cohort we created. In this question, we use multiple imputation to obtain a data set without missing values.
+
+0. Read following tutorials on the R package miceRanger for imputation: <https://github.com/farrellday/miceRanger>, <https://cran.r-project.org/web/packages/miceRanger/vignettes/miceAlgorithm.html>.
+
+    A more thorough book treatment of the practical imputation strategies is the book [*_Flexible Imputation of Missing Data_*](https://stefvanbuuren.name/fimd/) by Stef van Buuren. 
+
+1. Explain the jargon MCAR, MAR, and MNAR.
+
+- MCAR: If the probability of being missing is the same for all cases, then the data are said to be missing completely at random. This implies that causes of the missing data are unrelated to the data. An example of MCAR is a weighing scale that ran out of batteries. Some of the data will be missing simply because of bad luck.
+
+- MAR: If the probability of being missing is the same only within groups defined by the observed data, then the data are missing at random (MAR). MAR is a much broader class than MCAR. For example, when placed on a soft surface, a weighing scale may produce more missing values than when placed on a hard surface. Data like this are thus not MCAR. However, if we know surface type and we can assume MCAR within the type of surface, then the data are MAR.
+
+- MNAR: If neither MCAR nor MAR holds, then we speak of missing not at random (MNAR). MNAR means that the probability of being missing varies for reasons that are unknown to us. For example, the weighing scale mechanism may wear out over time, producing more missing data as time progresses, but we may fail to note this. 
+
+2. Explain in a couple of sentences how the Multiple Imputation by Chained Equations (MICE) work.
+
+- Multiple Imputation by Chained Equations is a robust, informative method of dealing with missing data in datasets under certain assumptions about the data missingness mechanism (i.e., the data are missing at random, the data are missing completely at random). The procedure ‘fills in’ (imputes) missing data in a dataset through an iterative series of predictive models. In each iteration, each specified variable in the dataset is imputed using the other variables in the dataset. In essence, MICE imputes missing values in the variables of a data set by focusing on one variable at a time. While placing focus on one variable, MICE uses all the other relevant variables in the data set to predict missingness in that variable. The prediction is based on a regression model (a linear regression model for continuous outcome variables, and a logistic regression model for the dichotomous outcome variables).
+
+
+3. Perform a data quality check of the ICU stays data. Discard variables with substantial missingness, say >5000 `NA`s. Replace apparent data entry errors by `NA`s.
+
+```{r}
+#loading in data
+setwd("/home/valentina214/biostat-203b-2021-winter/hw3/mimiciv_shiny")
+icu_cohort <- readRDS("icu_cohort.rds")
+head(icu_cohort)
+ncol(icu_cohort)
+```
+
+```{r}
+icu_cohort$died.within.30 <- ifelse(is.na(icu_cohort$died.within.30) == TRUE, 0, 1)
+colSums(is.na(icu_cohort))
+
+icu_cohort2 <- icu_cohort[, -which(colSums(is.na(icu_cohort)) >= 5000 )]
+colSums(is.na(icu_cohort2))
+nrow(icu_cohort2)
+```
+
+
+
+4. Impute missing values by `miceRanger` (request $m=3$ datasets). This step is very computational intensive. Make sure to save the imputation results as a file.
+
+```{r}
+impute <- miceRanger(icu_cohort2, m = 3, vars = c("marital_status", "bicarbonate", "calcium", "chloride", "creatinine", "glucose", "magnesium", "potassium", "sodium", "hematocrit", "wbc", "heart_rate", "non_invasive_blood_pressure_systolic", "non_invasive_blood_pressure_mean", "respiratory_rate", "temperature_fahrenheit"), max.depth = 10, returnModels = TRUE) 
+
+# if(file.exists(str_c("./impute.RData"))){
+#   load(str_c("./impute.RData"))
+# } else{
+#   miceObj <- miceRanger(
+#     icu_cohort2, m = 3, vars = c("marital_status", "bicarbonate", "calcium", "chloride", "creatinine", "glucose", "magnesium", "potassium", "sodium", "hematocrit", "wbc", "heart_rate", "non_invasive_blood_pressure_systolic", "non_invasive_blood_pressure_mean", "respiratory_rate", "temperature_fahrenheit"), max.depth = 10, returnModels = T, verbose = F)
+#   save(miceObj, file = "./miceObj.RData")
+# }
+```
+
+```{r}
+save(impute, file = "./impute.RData")
+```
+
+
+5. Make imputation diagnostic plots and explain what they mean.
+
+```{r}
+micedf <- load("impute.RData")
+```
+
+```{r}
+plotDistributions(impute,vars= c("marital_status", "bicarbonate", "calcium", "chloride", "creatinine", "glucose", "magnesium", "potassium", "sodium", "hematocrit", "wbc", "heart_rate", "non_invasive_blood_pressure_systolic", "non_invasive_blood_pressure_mean", "respiratory_rate", "temperature_fahrenheit"))
+```
+
+```{r}
+plotCorrelations(impute,vars=c("marital_status", "bicarbonate", "calcium", "chloride", "creatinine", "glucose", "magnesium", "potassium", "sodium", "hematocrit", "wbc", "heart_rate", "non_invasive_blood_pressure_systolic", "non_invasive_blood_pressure_mean", "respiratory_rate", "temperature_fahrenheit"))
+```
+
+```{r}
+plotVarConvergence(impute,vars=c("marital_status", "bicarbonate", "calcium", "chloride", "creatinine", "glucose", "magnesium", "potassium", "sodium", "hematocrit", "wbc", "heart_rate", "non_invasive_blood_pressure_systolic", "non_invasive_blood_pressure_mean", "respiratory_rate", "temperature_fahrenheit"))
+```
+
+```{r}
+plotModelError(impute,vars=c("marital_status", "bicarbonate", "calcium", "chloride", "creatinine", "glucose", "magnesium", "potassium", "sodium", "hematocrit", "wbc", "heart_rate", "non_invasive_blood_pressure_systolic", "non_invasive_blood_pressure_mean", "respiratory_rate", "temperature_fahrenheit"))
+```
+
+```{r plotVarImportance, fig.align = 'center', fig.width=10}
+plotVarImportance(impute, 
+                  tl.cex = 0.7, 
+                  cl.cex = 0.7, cl.ratio = 0.1, cl.align.text = "l", 
+                  number.cex = 0.5)
+```
+
+6. Obtain a complete data set by averaging the 3 imputed data sets.
+
+```{r}
+dataset1 <- dataset1 %>%  mutate_if(is.character, as.factor) 
+
+dataset1.num <- dataset1 %>% mutate_if(is.factor, as.numeric)
+```
+
+
+```{r}
+ImputedList <- completeData(impute)
+df1 <- ImputedList$Dataset_1
+df2 <- ImputedList$Dataset_2
+df3 <- ImputedList$Dataset_3
+
+#converting characters into factors, then numeric
+
+df1 <- df1 %>% mutate_if(is.character, as.factor) %>% 
+  mutate_if(is.factor, as.numeric) 
+
+df2 <- df2 %>% mutate_if(is.character, as.factor) %>% 
+  mutate_if(is.factor, as.numeric) 
+
+df3 <- df3 %>% mutate_if(is.character, as.factor) %>% 
+  mutate_if(is.factor, as.numeric) 
+
+#selecting necessary columns for logistic regression (q2) before averaging 
+##datasets
+
+colnames(df1)
+df1 <- df1 %>% select(subject_id, gender, age_at_adm, marital_status, 
+                      ethnicity, died.within.30)
+df2 <- df2 %>% select(subject_id, gender, age_at_adm, marital_status, ethnicity, 
+                      died.within.30)
+df3 <- df3 %>% select(subject_id, gender, age_at_adm, marital_status, ethnicity, 
+                      died.within.30)
+
+#averaging datasets
+
+av_df <- (df1 + df2 + df3)/3
+
+av_df <- av_df %>% round(av_df$marital_status) %>% 
+  mutate_if(is.numeric, as.factor) 
+
+as.data.frame(av_df)
+```
+
+
+## Q2. Predicting 30-day mortality
+
+Develop at least two analytic approaches for predicting the 30-day mortality of patients admitted to ICU using demographic information (gender, age, marital status, ethnicity), first lab measurements during ICU stay, and first vital measurements during ICU stay. For example, you can use (1) logistic regression (`glm()` function), (2) logistic regression with lasso penalty (glmnet package), (3) random forest (randomForest package), or (4) neural network.
+
+1. Partition data into 80% training set and 20% test set. Stratify partitioning according the 30-day mortality status.
+
+```{r}
+set.seed(203)
+training_set <-av_df %>% group_by(died.within.30) %>%
+  slice_sample(prop = .8)
+
+test_set <- anti_join(av_df, training_set)
+```
+
+2. Train the models using the training set.
+
+```{r}
+glm
+```
+
+
+3. Compare model prediction performance on the test set.
