@@ -65,39 +65,18 @@ nrow(icu_cohort2)
 
 4. Impute missing values by `miceRanger` (request $m=3$ datasets). This step is very computational intensive. Make sure to save the imputation results as a file.
 
-```{r eval=FALSE, include=FALSE}
-impute <- miceRanger(icu_cohort2, m = 3, vars = c("marital_status", 
-                                                  "bicarbonate", "calcium", 
-                                                  "chloride", "creatinine", 
-                                                  "glucose", "magnesium", 
-                                                  "potassium", "sodium", 
-                                                  "hematocrit", "wbc", 
-                                                  "heart_rate", 
-                                                  "non_invasive_blood_pressure_systolic", 
-                                                  "non_invasive_blood_pressure_mean", 
-                                                  "respiratory_rate", 
-                                                  "temperature_fahrenheit"), 
-                     max.depth = 10, returnModels = TRUE) 
+```{r}
 
-# if(file.exists(str_c("./impute.RData"))){
-#   load(str_c("./impute.RData"))
-# } else{
-#   miceObj <- miceRanger(
-#     icu_cohort2, m = 3, vars = c("marital_status", "bicarbonate", "calcium", "chloride", "creatinine", "glucose", "magnesium", "potassium", "sodium", "hematocrit", "wbc", "heart_rate", "non_invasive_blood_pressure_systolic", "non_invasive_blood_pressure_mean", "respiratory_rate", "temperature_fahrenheit"), max.depth = 10, returnModels = T, verbose = F)
-#   save(miceObj, file = "./miceObj.RData")
-# }
+if(file.exists(str_c("./imputationresults.RData"))){
+   load(str_c("./imputationresults.RData"))
+ } else{
+   miceObj <- miceRanger(
+     icu_cohort2, m = 3, vars = c("marital_status", "bicarbonate", "calcium", "chloride", "creatinine", "glucose", "magnesium", "potassium", "sodium", "hematocrit", "wbc", "heart_rate", "non_invasive_blood_pressure_systolic", "non_invasive_blood_pressure_mean", "respiratory_rate", "temperature_fahrenheit"), max.depth = 10, returnModels = T, verbose = T)
+   save(miceObj, file = "./imputationresults.RData")
+ }
 ```
-
-```{r eval=FALSE, include=FALSE}
-save(impute, file = "./impute.RData")
-```
-
 
 5. Make imputation diagnostic plots and explain what they mean.
-
-```{r}
-micedf <- load("~/biostat-203b-2021-winter/hw 4/impute.RData")
-```
 
 ###Distribution of Imputed Values
 
@@ -105,7 +84,7 @@ We can take a look at the imputed distributions compared to the original distrib
 The red line is the density of the original, nonmissing data. The smaller, black lines are the density of the imputed values in each of the datasets. 
 
 ```{r}
-plotDistributions(micedf ,vars= c("marital_status", "bicarbonate", "calcium", 
+plotDistributions(miceObj ,vars= c("marital_status", "bicarbonate", "calcium", 
                                  "chloride", "creatinine", "glucose", 
                                  "magnesium", "potassium", "sodium", 
                                  "hematocrit", "wbc", "heart_rate", 
@@ -115,7 +94,7 @@ plotDistributions(micedf ,vars= c("marital_status", "bicarbonate", "calcium",
 ```
 
 ```{r}
-plotCorrelations(micedf,vars=c("marital_status", "bicarbonate", "calcium", 
+plotCorrelations(miceObj,vars=c("marital_status", "bicarbonate", "calcium", 
                                "chloride", "creatinine", "glucose", "magnesium", 
                                "potassium", "sodium", "hematocrit", "wbc", 
                                "heart_rate", 
@@ -128,7 +107,7 @@ plotCorrelations(micedf,vars=c("marital_status", "bicarbonate", "calcium",
 The plotCorrelations function shows you a boxplot of the correlations between imputed values in every combination of datasets, at each iteration.
 
 ```{r}
-plotVarConvergence(micedf,vars=c("marital_status", "bicarbonate", "calcium", 
+plotVarConvergence(miceObj,vars=c("marital_status", "bicarbonate", "calcium", 
                                  "chloride", "creatinine", "glucose", 
                                  "magnesium", "potassium", "sodium", 
                                  "hematocrit", "wbc", "heart_rate", 
@@ -141,7 +120,7 @@ plotVarConvergence(micedf,vars=c("marital_status", "bicarbonate", "calcium",
 Sometimes, if the missing data locations are correlated with higher or lower values, multiple iterations need to be run for the process to converge to the true theoretical mean (given the information that exists in the dataset). Using this plot we can see if the imputed data converged, or if we need to run more iterations.
 
 ```{r}
-plotModelError(micedf,vars=c("marital_status", "bicarbonate", "calcium", 
+plotModelError(miceObj,vars=c("marital_status", "bicarbonate", "calcium", 
                              "chloride", "creatinine", "glucose", "magnesium", 
                              "potassium", "sodium", "hematocrit", "wbc", 
                              "heart_rate", 
@@ -154,7 +133,7 @@ plotModelError(micedf,vars=c("marital_status", "bicarbonate", "calcium",
 Below we plot the variable importance for each imputed variable. The top axis contains the variable that was used to impute the variable on the left axis.
 
 ```{r plotVarImportance, fig.align = 'center', fig.width=10}
-plotVarImportance(micedf, 
+plotVarImportance(miceObj, 
                   tl.cex = 0.7, 
                   cl.cex = 0.7, cl.ratio = 0.1, cl.align.text = "l", 
                   number.cex = 0.5)
@@ -164,7 +143,7 @@ plotVarImportance(micedf,
 
 
 ```{r}
-#ImputedList <- completeData(micedf)
+ImputedList <- completeData(miceObj)
 df1 <- ImputedList$Dataset_1 
 df2 <- ImputedList$Dataset_2 
 df3 <- ImputedList$Dataset_3 
